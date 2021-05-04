@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="insession-starter:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>insession-starter</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="insession-starter-1.0.1.war">
+      <element id="artifact" artifact-name="insession-starter:war exploded" />
+    </root>
+  </artifact>
+</component>

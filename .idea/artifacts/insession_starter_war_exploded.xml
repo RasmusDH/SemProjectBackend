@@ -1,0 +1,65 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="insession-starter:war exploded">
+    <output-path>$PROJECT_DIR$/target/insession-starter-1.0.1</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>insession-starter</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="insession-starter" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.7" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:jakarta.persistence:2.2.3" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.asm:2.7.7" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.antlr:2.7.7" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.jpa.jpql:2.7.7" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.core:2.7.7" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.17" />
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.bundles:jaxrs-ri:2.32" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.inject:jersey-hk2:2.32" />
+          <element id="library" level="project" name="Maven: org.glassfish.hk2:hk2-locator:2.6.1" />
+          <element id="library" level="project" name="Maven: org.glassfish.hk2.external:aopalliance-repackaged:2.6.1" />
+          <element id="library" level="project" name="Maven: org.glassfish.hk2:hk2-api:2.6.1" />
+          <element id="library" level="project" name="Maven: org.glassfish.hk2:hk2-utils:2.6.1" />
+          <element id="library" level="project" name="Maven: org.javassist:javassist:3.25.0-GA" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.core:jersey-common:2.32" />
+          <element id="library" level="project" name="Maven: jakarta.annotation:jakarta.annotation-api:1.3.5" />
+          <element id="library" level="project" name="Maven: org.glassfish.hk2:osgi-resource-locator:1.0.3" />
+          <element id="library" level="project" name="Maven: com.sun.activation:jakarta.activation:1.2.2" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.media:jersey-media-jaxb:2.32" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.media:jersey-media-json-binding:2.32" />
+          <element id="library" level="project" name="Maven: org.glassfish:jakarta.json:1.1.6" />
+          <element id="library" level="project" name="Maven: org.eclipse:yasson:1.0.6" />
+          <element id="library" level="project" name="Maven: org.glassfish:jakarta.json:module:1.1.6" />
+          <element id="library" level="project" name="Maven: jakarta.json.bind:jakarta.json.bind-api:1.0.2" />
+          <element id="library" level="project" name="Maven: jakarta.json:jakarta.json-api:1.1.6" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.core:jersey-client:2.32" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.core:jersey-server:2.32" />
+          <element id="library" level="project" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.containers:jersey-container-servlet-core:2.32" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.containers:jersey-container-servlet:2.32" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.media:jersey-media-sse:2.32" />
+          <element id="library" level="project" name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.3" />
+          <element id="library" level="project" name="Maven: jakarta.activation:jakarta.activation-api:1.2.2" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.6" />
+          <element id="library" level="project" name="Maven: org.glassfish.hk2.external:jakarta.inject:2.6.1" />
+          <element id="library" level="project" name="Maven: jakarta.ws.rs:jakarta.ws.rs-api:2.1.6" />
+          <element id="library" level="project" name="Maven: com.nimbusds:nimbus-jose-jwt:9.0.1" />
+          <element id="library" level="project" name="Maven: com.github.stephenc.jcip:jcip-annotations:1.0-1" />
+          <element id="library" level="project" name="Maven: org.mindrot:jbcrypt:0.4" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/insession-starter-1.0.1/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="insession-starter/web/Web" />
+    </root>
+  </artifact>
+</component>
