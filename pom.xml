@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.insession</groupId>
-    <artifactId>insession-starter</artifactId>
+    <artifactId>insession-sem-project</artifactId>
     <version>1.0.1</version>
     <packaging>war</packaging>
 
-    <name>inSession-startcode</name>
+    <name>Insession-SemProject</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -16,7 +16,7 @@
         <!-- TODO: Add the URL to your own tomcat server. Used to deploy your WAR-file -->
         <!-- IMPORTANT-1: If your server uses https (via NGINX) use your DOMAIN NAME and https below: -->
         <!-- IMPORTANT-2: Observe we are NOT using /manager/html but /manager/text for script uploads --> 
-        <remote.server>https://peterrambeckandersen.com/tomcat/manager/text</remote.server>
+        <remote.server>https://ditlevsoftware.com/tomcat/manager/text</remote.server>
         
     </properties>
     
