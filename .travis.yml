@@ -17,6 +17,11 @@ script:
 services:
    - mysql
 
+branches:
+  only:
+    - master
+    - main
+
 before_script:
 
 # TODO Add variable to make it simple to be reusable for all semester projects

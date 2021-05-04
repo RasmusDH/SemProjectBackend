@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="insession-starter-1.0.1.war">
+    <root id="archive" name="insession-sem-project-1.0.1.war">
       <element id="artifact" artifact-name="insession-starter:war exploded" />
     </root>
   </artifact>
