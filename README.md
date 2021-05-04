@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.com/RasmusDH/SemProjectBackend.svg?branch=main)](https://travis-ci.com/RasmusDH/SemProjectBackend)
 
 # InSession startcode
 
