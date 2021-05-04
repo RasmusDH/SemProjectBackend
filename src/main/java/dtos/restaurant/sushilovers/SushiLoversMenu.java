@@ -1,27 +1,20 @@
-package dtos.restaurant.bananaleaf;
+package dtos.restaurant.sushilovers;
 
-import dtos.restaurant.MenuDTO;
-import dtos.restaurant.sushilovers.SushiLoversMenu;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class BananaLeafMenu {
+public class SushiLoversMenu {
 
     private Integer id;
-    private String itemName;
+    private String name;
     private double price;
     private String category;
     private String description;
 
-    public BananaLeafMenu(Integer id, String itemName, double price, String category,
-        String description) {
+    public SushiLoversMenu(Integer id, String name, double price, String category, String description) {
         this.id = id;
-        this.itemName = itemName;
+        this.name = name;
         this.price = price;
         this.category = category;
         this.description = description;
     }
-
 
     public Integer getId() {
         return id;
@@ -31,12 +24,12 @@ public class BananaLeafMenu {
         this.id = id;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getName() {
+        return name;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getPrice() {
