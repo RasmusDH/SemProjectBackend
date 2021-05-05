@@ -2,6 +2,7 @@ package dtos.restaurant;
 
 import dtos.restaurant.alcohol.AlcoholDTO;
 import dtos.restaurant.bananaleaf.BananaLeafDTO;
+import dtos.restaurant.pizza2610.Pizza2610DTO;
 import dtos.restaurant.sushilovers.SushiLoversDTO;
 import java.util.List;
 
@@ -33,6 +34,12 @@ public class RestaurantDTO {
         this.name = alcoholDTO.getName();
         this.description = alcoholDTO.getDescription();
         this.menus = AlcoholDTO.getMenuDTOsFromAlcoholMenus(alcoholDTO.getCourses());
+    }
+
+       public RestaurantDTO(Pizza2610DTO pizza2610DTO) {
+        this.name = pizza2610DTO.getName();
+        this.description =pizza2610DTO.getDescription();
+        this.menus = pizza2610DTO.getMenuDTOsFromPizza2610Menus(pizza2610DTO.getCourses());
     }
 
     public String getName() {
