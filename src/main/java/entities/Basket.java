@@ -48,7 +48,7 @@ public class Basket implements Serializable {
     public void addItems(BasketItem basketItem) {
      if (basketItem != null) {    
          this.items.add(basketItem);
-        basketItem.setBasket(this);
+         basketItem.setBasket(this);
      }
     }
 

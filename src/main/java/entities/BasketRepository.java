@@ -5,6 +5,8 @@
  */
 package entities;
 
+import dtos.BasketDTO;
+import dtos.BasketItemDTO;
 import javax.ws.rs.WebApplicationException;
 
 /**
@@ -13,9 +15,7 @@ import javax.ws.rs.WebApplicationException;
  */
 public interface BasketRepository {
     
- 
     public BasketDTO create(BasketDTO basketDTO) throws WebApplicationException;
     public BasketDTO addToBasket(BasketItemDTO basketItemDTO) throws WebApplicationException;
   
-   
 }
