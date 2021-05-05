@@ -14,8 +14,7 @@ import utils.EMF_Creator;
 
 class RestaurantFacadeTest {
 
-    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactoryForTest();
-    private static final RestaurantFacade facade = RestaurantFacade.getInstance(EMF);
+    private static final RestaurantFacade facade = RestaurantFacade.getInstance();
 
     @Nested
     @DisplayName("get all menus")

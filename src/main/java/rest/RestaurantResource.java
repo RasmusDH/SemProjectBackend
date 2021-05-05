@@ -9,7 +9,7 @@ import rest.provider.Provider;
 @Path("restaurants")
 public class RestaurantResource extends Provider {
 
-    private final RestaurantFacade facade = RestaurantFacade.getInstance(EMF);
+    private final RestaurantFacade facade = RestaurantFacade.getInstance();
 
     @Override
     public Response getAll() {
