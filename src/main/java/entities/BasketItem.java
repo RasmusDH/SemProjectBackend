@@ -35,7 +35,7 @@ public class BasketItem implements Serializable {
     private int amount;
     private double price;
     
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true)
     private Basket basket;
     
    
