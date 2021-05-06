@@ -15,15 +15,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import utils.EMF_Creator;
 
 /**
  *
  * @author peter
  */
+@Disabled
 public class BasketItemFacadeTest {
     
-     private static final BasketItemFacade facade = BasketItemFacade.getInstance();
+    private static final BasketItemFacade facade = BasketItemFacade.getInstance();
     
     
     private static EntityManagerFactory emf;
@@ -70,8 +72,8 @@ public class BasketItemFacadeTest {
     @Test
     public void testCreate() {
         
-       // BasketItemDTO actual = facade.create(basketItemDTO);
-       assertEquals("SushiLovers", basketItemDTO.getRestaurantName());
+       BasketItemDTO actual = facade.create(basketItemDTO);
+       assertEquals("SushiLovers", actual.getRestaurantName());
         
     }
     

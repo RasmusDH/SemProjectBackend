@@ -5,10 +5,13 @@
  */
 package entities;
 
+import dtos.BasketDTO;
+import dtos.BasketItemDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,22 +30,36 @@ public class Basket implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int dummy;
     
-    @ManyToOne
-    private User user;
+    // @ManyToOne
+    // private User user;
 
     @OneToMany(
         mappedBy = "basket",
         cascade = CascadeType.PERSIST
     )
+    
     private List<BasketItem> items;
+    
 
-    public Basket(User user) {
-        this.items = new ArrayList<>();
-        this.user = user;
-    }
+//    public Basket() {
+//        this.items = new ArrayList<>();
+//        // this.user = user;
+//    }
 
     public Basket() {       
+        this.items = new ArrayList<>();
+        this.dummy = 1;
+    }
+    
+    public Basket(BasketDTO basketDTO) {
+       this.id = basketDTO.getId();
+       this.items = new ArrayList<>();
+       for (BasketItemDTO bdtos: basketDTO.getItems()) {
+           items.add(new BasketItem(bdtos));
+       }
+       this.dummy = 1;
     }
     
     public void addItems(BasketItem basketItem) {
@@ -51,13 +68,9 @@ public class Basket implements Serializable {
          basketItem.setBasket(this);
      }
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    
+    public List<BasketItem> getItems() {
+        return items;
     }
         
      public Long getId() {
@@ -67,5 +80,15 @@ public class Basket implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public int getDummy() {
+        return dummy;
+    }
+
+    public void setDummy(int dummy) {
+        this.dummy = dummy;
+    }
+    
+    
 
 }

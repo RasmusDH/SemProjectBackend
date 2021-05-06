@@ -5,10 +5,12 @@
  */
 package entities;
 
+import dtos.BasketItemDTO;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +35,7 @@ public class BasketItem implements Serializable {
     private int amount;
     private double price;
     
-    @ManyToOne
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private Basket basket;
     
    
@@ -44,6 +46,14 @@ public class BasketItem implements Serializable {
         this.price = price;
     }
 
+    public BasketItem(BasketItemDTO basketItemDTO) {
+        this.id = basketItemDTO.getId();
+        this.restaurantName = basketItemDTO.getRestaurantName();
+        this.dishNumber = basketItemDTO.getDishNumber();
+        this.amount = basketItemDTO.getAmount();
+        this.price = basketItemDTO.getPrice();
+    }
+    
     public BasketItem() {
     }
 

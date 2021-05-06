@@ -15,7 +15,8 @@ import javax.ws.rs.WebApplicationException;
  */
 public interface BasketRepository {
     
-    public BasketDTO create(BasketDTO basketDTO) throws WebApplicationException;
-    public BasketDTO addToBasket(BasketItemDTO basketItemDTO) throws WebApplicationException;
-  
+    public BasketDTO create() throws WebApplicationException;
+    public BasketDTO addToBasket(Long id, BasketItemDTO basketItemDTO) throws WebApplicationException;
+    public BasketDTO getBasket(Long id) throws WebApplicationException;
+    
 }

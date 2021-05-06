@@ -18,16 +18,22 @@ import java.util.List;
  */
 public class BasketDTO {
     
-     private User user;
-     private List<BasketItem> items;
+    
+    private Long id;
+    
+     // private User user;
+     private List<BasketItemDTO> items;
 
-    public BasketDTO(User user, List<BasketItem> items) {
-        this.user = user;
+    public BasketDTO(Long id, List<BasketItemDTO> items) {
+        this.id = id;
+        //this.user = user;
         this.items = items;
     }
-    
+     
     public BasketDTO(Basket basket) {
-        this.user = basket.getUser();
+        this.id = basket.getId();
+        this.items = BasketItemDTO.getAllasketItemDtoes(basket.getItems());
+//        this.user = basket.getUser();
     }
     
     public List<BasketDTO> getAllBasketDtoes(List<Basket> bsList) {
@@ -36,19 +42,22 @@ public class BasketDTO {
         return bsDTO;
     }
 
-    public User getUser() {
-        return user;
+    public Long getId() {
+        return id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setId(Long id) {
+        this.id = id;
     }
+    
+    
 
-    public List<BasketItem> getItems() {
+
+    public List<BasketItemDTO> getItems() {
         return items;
     }
 
-    public void setItems(List<BasketItem> items) {
+    public void setItems(List<BasketItemDTO> items) {
         this.items = items;
     }
     
