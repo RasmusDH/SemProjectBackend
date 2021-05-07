@@ -43,15 +43,15 @@ public class User implements Serializable {
         mappedBy = "user",
         cascade = CascadeType.PERSIST
     )
-    //private List<Basket> baskets;
+    private List<Basket> baskets = new ArrayList<>();
    
    
-//    public void addBasket(Basket basket) {
-//     if (basket != null) {    
-//         this.baskets.add(basket);
-//        basket.setUser(this);
-//     }
-//    }
+    public void addBasket(Basket basket) {
+     if (basket != null) {    
+         this.baskets.add(basket);
+        basket.setUser(this);
+     }
+    }
   
  
   public List<String> getRolesAsStrings() {

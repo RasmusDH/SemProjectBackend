@@ -20,20 +20,21 @@ public class BasketDTO {
     
     
     private Long id;
-    
-     // private User user;
-     private List<BasketItemDTO> items;
+    private boolean active;
+       
+    private User user;
+    private List<BasketItemDTO> items;
 
-    public BasketDTO(Long id, List<BasketItemDTO> items) {
+    public BasketDTO(Long id, User user, List<BasketItemDTO> items) {
         this.id = id;
-        //this.user = user;
+        this.user = user;
         this.items = items;
     }
      
     public BasketDTO(Basket basket) {
         this.id = basket.getId();
         this.items = BasketItemDTO.getAllasketItemDtoes(basket.getItems());
-//        this.user = basket.getUser();
+        this.user = basket.getUser();
     }
     
     public List<BasketDTO> getAllBasketDtoes(List<Basket> bsList) {
@@ -49,10 +50,7 @@ public class BasketDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    
-
-
+       
     public List<BasketItemDTO> getItems() {
         return items;
     }
