@@ -61,10 +61,12 @@ public class BasketFacade implements BasketRepository {
             em.getTransaction().begin();
             
             try {
-            b = (Basket)em.createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName")
+            b = (Basket)em.createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = 1")
             .setParameter("userName", userName)
             .getSingleResult();
-                System.out.println("Basket found" + b);
+            
+            System.out.println("Basket found" + b);
+            
             } catch (Exception e){
                
                 User u = em.find(User.class, userName);

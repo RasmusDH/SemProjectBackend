@@ -19,6 +19,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -81,12 +82,15 @@ public class BasketResource extends Provider {
     }
     
     @Path("/add/{userName}")
-    @PUT
+    @POST
     public Response addItem(@PathParam("userName") String userName, String jsonBody) {
                
-        BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
-        BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
-        return Response.ok(basketDTO).build();
+      BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
+      BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
+      
+      System.out.println(basketDTO);
+      
+      return Response.ok(basketDTO).build();
         
     }
 
