@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @Table(name = "users")
+// @NamedQuery(name = "Users.deleteAllRows", query = "DELETE from User")
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -35,7 +37,10 @@ public class User implements Serializable {
   @JoinTable(name = "user_roles", joinColumns = {
     @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-  @ManyToMany
+  
+  @ManyToMany (
+        cascade = CascadeType.PERSIST
+    )
   private List<Role> roleList = new ArrayList<>();
 
    

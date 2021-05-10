@@ -80,12 +80,12 @@ public class BasketResource extends Provider {
         return Response.ok(basketDTO).build();
     }
     
-    @Path("/add/{id}")
+    @Path("/add/{userName}")
     @PUT
-    public Response addItem(@PathParam("id") Long id, String jsonBody) {
+    public Response addItem(@PathParam("userName") String userName, String jsonBody) {
                
         BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
-        BasketDTO basketDTO = REPO.addToBasket(id, basketItemDTO);
+        BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
         return Response.ok(basketDTO).build();
         
     }

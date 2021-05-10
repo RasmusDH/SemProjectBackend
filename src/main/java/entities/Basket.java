@@ -42,11 +42,12 @@ public class Basket implements Serializable {
     
     private List<BasketItem> items;
     
-
-//    public Basket() {
-//        this.items = new ArrayList<>();
-//        // this.user = user;
-//    }
+    public Basket(User user) {       
+        this.items = new ArrayList<>();
+        this.active = true;
+        this.user = user;
+    }
+    
 
     public Basket() {       
         this.items = new ArrayList<>();
