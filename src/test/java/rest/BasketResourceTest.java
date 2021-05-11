@@ -89,7 +89,7 @@ public class BasketResourceTest extends SetupRestTests {
             .header("x-access-token", token)
             .body(requestBody)
             .when()
-            .post("/basket/add/user")
+            .post("/basket/add")
             .then()
             .assertThat()
             .statusCode(HttpStatus.OK_200.getStatusCode());
