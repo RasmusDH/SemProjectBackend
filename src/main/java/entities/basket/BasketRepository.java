@@ -22,4 +22,6 @@ public interface BasketRepository {
 
     BasketDTO getUsersActiveBasket(String userName) throws WebApplicationException;
 
+    BasketItemDTO editBasket(EditBasketType type, Long itemId) throws WebApplicationException;
+
 }

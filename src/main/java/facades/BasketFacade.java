@@ -12,6 +12,7 @@ import entities.basket.Basket;
 import entities.basket.BasketItem;
 import entities.basket.BasketRepository;
 import entities.User;
+import entities.basket.EditBasketType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
@@ -67,7 +68,7 @@ public class BasketFacade implements BasketRepository {
 
             try {
                 b = (Basket) em
-                    .createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = 1")
+                    .createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true")
                     .setParameter("userName", userName)
                     .getSingleResult();
 
@@ -124,6 +125,69 @@ public class BasketFacade implements BasketRepository {
             return new BasketDTO(basket);
         } catch (Exception e) {
             throw new WebApplicationException("User has no basket", 400);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public BasketItemDTO editBasket(EditBasketType type, Long itemId) throws WebApplicationException {
+        switch (type) {
+            case DELETE:
+                return deleteItemFromBasket(itemId);
+            case INCREMENT:
+                return changeItemAmount(ChangeType.INCREMENT, itemId);
+            case DECREMENT:
+                return changeItemAmount(ChangeType.DECREMENT, itemId);
+            default:
+                throw new WebApplicationException("Unknown edit command: " + type.name());
+        }
+    }
+
+    enum ChangeType {
+        INCREMENT, DECREMENT
+    }
+
+    private BasketItemDTO changeItemAmount(ChangeType changeType, Long itemId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            BasketItem basketItem = em.find(BasketItem.class, itemId);
+            if (basketItem == null)
+                throw new WebApplicationException("Unknown item with id: " + itemId);
+
+            em.getTransaction().begin();
+            basketItem.setAmount(getNewItemAmount(basketItem, changeType));
+            em.getTransaction().commit();
+
+            return new BasketItemDTO(basketItem);
+        } finally {
+            em.close();
+        }
+    }
+
+    private int getNewItemAmount(BasketItem basketItem, ChangeType changeType) {
+        switch (changeType) {
+            case INCREMENT:
+                return basketItem.getAmount() + 1;
+            case DECREMENT:
+                return basketItem.getAmount() - 1;
+            default:
+                throw new WebApplicationException("Unknown change type: " + changeType.name());
+        }
+    }
+
+    private BasketItemDTO deleteItemFromBasket(Long itemId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            BasketItem basketItem = em.find(BasketItem.class, itemId);
+            if (basketItem == null)
+                throw new WebApplicationException("Could not find basketItem with id: " + itemId);
+
+            em.getTransaction().begin();
+            basketItem.getBasket().getItems().remove(basketItem);
+            em.getTransaction().commit();
+
+            return new BasketItemDTO(basketItem);
         } finally {
             em.close();
         }
