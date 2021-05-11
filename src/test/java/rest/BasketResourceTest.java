@@ -53,32 +53,24 @@ public class BasketResourceTest extends SetupRestTests {
     void setUp() {
         EntityManager em = emf.createEntityManager();
         try {
-            User user = new User("user", "1234");
-            Role role = new Role("user");
-
-            em.getTransaction().begin();
-            em.persist(role);
-            em.persist(user);
-            user.addRole(role);
-
-            b1 = new Basket(user);
-            b1.addItems(new BasketItem("Sushi", 2, 10, 9.99));
-            em.persist(b1);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-    }
-
-    @AfterEach
-    void tearDown() {
-        EntityManager em = emf.createEntityManager();
-        try {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM BasketItem").executeUpdate();
             em.createQuery("DELETE FROM Basket").executeUpdate();
             em.createQuery("DELETE FROM Role").executeUpdate();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
+
+            User user = new User("user", "1234");
+            Role role = new Role("user");
+            em.persist(role);
+            em.persist(user);
+            user.addRole(role);
+            em.getTransaction().commit();
+
+
+            em.getTransaction().begin();
+            b1 = new Basket(user);
+            b1.addItems(new BasketItem("Sushi", 2, 10, 9.99));
+            em.persist(b1);
             em.getTransaction().commit();
         } finally {
             em.close();

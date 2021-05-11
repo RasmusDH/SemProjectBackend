@@ -7,6 +7,7 @@ package facades;
 
 import dtos.BasketDTO;
 import dtos.BasketItemDTO;
+import dtos.UserDTO;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
 import entities.basket.BasketRepository;
@@ -46,7 +47,11 @@ public class BasketFacade implements BasketRepository {
         } finally {
             em.close();
         }
-        return new BasketDTO(basket);
+        return new BasketDTO(
+            basket.getId(),
+            new UserDTO(),
+            BasketItemDTO.getAllasketItemDtoes(basket.getItems())
+        );
     }
 
     @Override
