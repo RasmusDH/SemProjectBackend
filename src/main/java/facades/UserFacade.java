@@ -1,14 +1,18 @@
 package facades;
 
+import dtos.UserDTO;
+import entities.Role;
 import entities.User;
+import entities.UserRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.WebApplicationException;
 import security.errorhandling.AuthenticationException;
 
 /**
  * @author lam@cphbusiness.dk
  */
-public class UserFacade {
+public class UserFacade implements UserRepository {
 
     private static EntityManagerFactory emf;
     private static UserFacade instance;
@@ -28,6 +32,29 @@ public class UserFacade {
         }
         return instance;
     }
+    
+    @Override
+    public UserDTO create(UserDTO userDTO) throws WebApplicationException {
+        
+         // We create a User with user 'Role' - not admin. 
+        EntityManager em = emf.createEntityManager();
+        User user = new User(userDTO.getUserName(),userDTO.getHashPassword());  
+        
+        try{ 
+            em.getTransaction().begin();
+            Role role = em.find(Role.class, "user");
+            user.addRole(role);
+            em.persist(user);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new WebApplicationException("Username already exist");
+        } finally {
+            em.close();
+        }
+        return new UserDTO(user);
+    }
+        
+    
 
     public User getVeryfiedUser(String username, String password) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();

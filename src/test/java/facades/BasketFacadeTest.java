@@ -29,8 +29,6 @@ import utils.EMF_Creator;
 public class BasketFacadeTest {
 
     private static EntityManagerFactory emf;
-
-
     private static BasketFacade facade;
 
 
@@ -56,6 +54,7 @@ public class BasketFacadeTest {
 
         @AfterEach
         public void tearDown() {
+            
         }
 
 
@@ -77,15 +76,7 @@ public class BasketFacadeTest {
             Role role = new Role("user");
             user.addRole(role);
 
-            try {
-                em.getTransaction().begin();
-                em.createQuery("DELETE FROM Role").executeUpdate();
-                em.createNamedQuery("User.deleteAllRows").executeUpdate();
-                em.persist(user);
-                em.getTransaction().commit();
-            } finally {
-                em.close();
-            }
+           
 
             System.out.println("addToBasket");
             BasketItemDTO basketItemDTO = new BasketItemDTO("PIZZA2610", 1, 2, 3);
