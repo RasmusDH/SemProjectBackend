@@ -30,10 +30,10 @@ public class Basket implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int dummy;
+    private boolean active;
     
-    // @ManyToOne
-    // private User user;
+    @ManyToOne
+    private User user;
 
     @OneToMany(
         mappedBy = "basket",
@@ -42,25 +42,25 @@ public class Basket implements Serializable {
     
     private List<BasketItem> items;
     
-
-//    public Basket() {
-//        this.items = new ArrayList<>();
-//        // this.user = user;
-//    }
+    public Basket(User user) {       
+        this.items = new ArrayList<>();
+        this.active = true;
+        this.user = user;
+    }
+    
 
     public Basket() {       
         this.items = new ArrayList<>();
-        this.dummy = 1;
+        this.active = true;
     }
-    
-    public Basket(BasketDTO basketDTO) {
-       this.id = basketDTO.getId();
-       this.items = new ArrayList<>();
-       for (BasketItemDTO bdtos: basketDTO.getItems()) {
-           items.add(new BasketItem(bdtos));
-       }
-       this.dummy = 1;
-    }
+//    
+//    public Basket(BasketDTO basketDTO) {
+//       this.id = basketDTO.getId();
+//       this.items = new ArrayList<>();
+//       for (BasketItemDTO bdtos: basketDTO.getItems()) {
+//           items.add(new BasketItem(bdtos));
+//       }      
+//    }
     
     public void addItems(BasketItem basketItem) {
      if (basketItem != null) {    
@@ -81,14 +81,24 @@ public class Basket implements Serializable {
         this.id = id;
     }
 
-    public int getDummy() {
-        return dummy;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setDummy(int dummy) {
-        this.dummy = dummy;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     
+    
+
     
 
 }

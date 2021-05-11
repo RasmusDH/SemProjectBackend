@@ -31,7 +31,7 @@ public class RestaurantFacade {
         return new String[]{
             Endpoint.SUSHI_LOVERS.getUrl(),
             Endpoint.BANANA_LEAF.getUrl(),
-            Endpoint.ALCOHOL.getUrl(),
+            // Endpoint.ALCOHOL.getUrl(),
             Endpoint.PIZZA2610.getUrl()
         };
     }
@@ -42,8 +42,8 @@ public class RestaurantFacade {
         List<RestaurantDTO> restaurantDTOS = new ArrayList<>();
         restaurantDTOS.add(new RestaurantDTO(gson.fromJson(jsonDataArray.get(0), SushiLoversDTO.class)));
         restaurantDTOS.add(new RestaurantDTO(gson.fromJson(jsonDataArray.get(1), BananaLeafDTO.class)));
-        restaurantDTOS.add(new RestaurantDTO(gson.fromJson(jsonDataArray.get(2), AlcoholDTO.class)));
-        restaurantDTOS.add(new RestaurantDTO(gson.fromJson(jsonDataArray.get(3), Pizza2610DTO.class)));
+        // restaurantDTOS.add(new RestaurantDTO(gson.fromJson(jsonDataArray.get(2), AlcoholDTO.class)));
+        restaurantDTOS.add(new RestaurantDTO(gson.fromJson(jsonDataArray.get(2), Pizza2610DTO.class)));
         return restaurantDTOS;
     }
 
@@ -66,7 +66,7 @@ public class RestaurantFacade {
 enum Endpoint {
     SUSHI_LOVERS("https://api.tobias-z.com/sushi/api/meals/"),
     BANANA_LEAF("https://peterrambeckandersen.com/tomcat/Bananaleaf/api/restaurant/"),
-    ALCOHOL("https://ditlevsoftware.com/tomcat/alcohol-shop/api/menu/"),
+    // ALCOHOL("https://ditlevsoftware.com/tomcat/alcohol-shop/api/menu/"),
     PIZZA2610("https://osvaldo.dk/tomcat/Pizza2610/api/menu/"); 
 
     private final String url;

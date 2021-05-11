@@ -8,6 +8,9 @@ package facades;
 import dtos.BasketDTO;
 import dtos.BasketItemDTO;
 import entities.Basket;
+import entities.Role;
+import entities.User;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.AfterEach;
@@ -30,14 +33,19 @@ public class BasketFacadeTest {
     
    
     private static BasketFacade facade;
-
+    
+    
+    
+    
     @Nested
     @DisplayName("Basket")
     class GetBasket {
 
     private BasketDTO b1;
     private BasketDTO b2;
+    private User u;
     
+   
         
         
     @BeforeEach
@@ -47,7 +55,9 @@ public class BasketFacadeTest {
        
         b1 = facade.create();
         b2 = new BasketDTO(new Basket());
-
+        
+       
+     
     }
     
     @AfterEach
@@ -67,15 +77,35 @@ public class BasketFacadeTest {
     @Test
     public void testAddToBasket() {
         
+        EntityManager em = emf.createEntityManager();
+        
+        
+        User user = new User("basketUser", "123");
+        Role role = new Role("user");
+        user.addRole(role);
+        
+         try {
+            em.getTransaction().begin();
+            // em.createNamedQuery("Users.deleteAllRows").executeUpdate();
+            em.persist(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+
+        
+        
         System.out.println("addToBasket");
         BasketItemDTO basketItemDTO = new BasketItemDTO("PIZZA2610", 1, 2, 3);
-        BasketDTO bDto = facade.addToBasket(b1.getId(), basketItemDTO);
+        // u = em.find(User.class, "user");
+        // System.out.println("Test" + u);
+        BasketDTO bDto = facade.addToBasket("basketUser", basketItemDTO);
         assertEquals(1, bDto.getItems().size());
         assertEquals("PIZZA2610", bDto.getItems().get(0).getRestaurantName());
         
         // Testing exception in case of basket does not exist in database.
-        b2.setId(0L);
-        assertThrows(WebApplicationException.class, () -> {facade.addToBasket(b2.getId(), basketItemDTO);});
+        // b2.setId(0L);
+        // assertThrows(WebApplicationException.class, () -> {facade.addToBasket(u.getUserName(), basketItemDTO);});
 
     }
     
@@ -94,6 +124,4 @@ public class BasketFacadeTest {
     }
     
     }
-    
 }
-
