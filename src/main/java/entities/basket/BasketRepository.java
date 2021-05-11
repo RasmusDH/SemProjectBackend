@@ -5,9 +5,8 @@
  */
 package entities.basket;
 
-import dtos.BasketDTO;
-import dtos.BasketItemDTO;
-import java.util.List;
+import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
 import javax.ws.rs.WebApplicationException;
 
 /**

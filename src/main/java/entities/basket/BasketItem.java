@@ -5,8 +5,7 @@
  */
 package entities.basket;
 
-import dtos.BasketItemDTO;
-import entities.basket.Basket;
+import dtos.basket.BasketItemDTO;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

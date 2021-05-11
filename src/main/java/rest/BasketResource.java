@@ -6,8 +6,8 @@
 package rest;
 
 import com.google.gson.Gson;
-import dtos.BasketDTO;
-import dtos.BasketItemDTO;
+import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
 import entities.basket.BasketRepository;
 import facades.BasketFacade;
 import javax.annotation.security.RolesAllowed;
@@ -21,7 +21,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import rest.provider.Provider;
-import security.UserPrincipal;
 import utils.EMF_Creator;
 
 /**

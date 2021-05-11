@@ -5,8 +5,7 @@
  */
 package rest;
 
-import dtos.BasketDTO;
-import dtos.BasketItemDTO;
+import dtos.basket.BasketItemDTO;
 
 import static io.restassured.RestAssured.given;
 
@@ -16,18 +15,12 @@ import entities.basket.Basket;
 import entities.basket.BasketItem;
 import io.restassured.http.ContentType;
 import javax.persistence.EntityManager;
-import javax.ws.rs.core.Response;
 import org.glassfish.grizzly.http.util.HttpStatus;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static rest.SetupRestTests.setupServer;
-import static rest.SetupRestTests.shutdownServer;
 
 /**
  * @author peter

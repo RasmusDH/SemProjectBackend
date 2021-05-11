@@ -1,9 +1,8 @@
-package dtos;
+package dtos.user;
 
 import entities.Role;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eclipse.persistence.jpa.jpql.tools.model.query.LikeExpressionStateObject;
 
 public class RoleDTO {
 
