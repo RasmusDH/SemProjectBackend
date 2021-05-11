@@ -8,18 +8,23 @@ package rest;
 import dtos.basket.BasketItemDTO;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import dtos.basket.EditBasketDTO;
 import entities.Role;
 import entities.User;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
+import entities.basket.EditBasketType;
 import io.restassured.http.ContentType;
 import javax.persistence.EntityManager;
 import org.glassfish.grizzly.http.util.HttpStatus;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -117,6 +122,81 @@ public class BasketResourceTest extends SetupRestTests {
             .get("/basket/active")
             .then()
             .statusCode(403);
+    }
+
+    @Nested
+    @DisplayName("edit basket")
+    class EditBasket {
+
+        private long oldId;
+        private long oldAmount;
+
+        @BeforeEach
+        void setUp() {
+            oldId = b1.getItems().get(0).getId();
+            oldAmount = b1.getItems().get(0).getAmount();
+        }
+
+        @Test
+        @DisplayName("should increment item amount")
+        void shouldIncrementItemAmount() {
+            String token = login("user", "1234");
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.INCREMENT, oldId);
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .body(requestBody)
+                .when()
+                .put("/basket/edit")
+                .then()
+                .statusCode(200)
+                .body("amount", Matchers.equalTo((int) oldAmount + 1));
+        }
+
+        @Test
+        @DisplayName("should decrement item amount")
+        void shouldDecrementItemAmount() {
+            String token = login("user", "1234");
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DECREMENT, oldId);
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .body(requestBody)
+                .when()
+                .put("/basket/edit")
+                .then()
+                .statusCode(200)
+                .body("amount", Matchers.equalTo((int) oldAmount - 1));
+        }
+
+        @Test
+        @DisplayName("should delete item")
+        void shouldDeleteItem() {
+            String token = login("user", "1234");
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DELETE, oldId);
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .body(requestBody)
+                .when()
+                .put("/basket/edit")
+                .then()
+                .statusCode(200);
+        }
+
+        @Test
+        @DisplayName("should throw exception if not logged in")
+        void shouldThrowExceptionIfNotLoggedIn() {
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DELETE, oldId);
+            given()
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .put("/basket/edit")
+                .then()
+                .statusCode(403);
+        }
+
     }
 
 }
