@@ -6,8 +6,7 @@
  */
 package dtos;
 
-import entities.Basket;
-import entities.BasketItem;
+import entities.basket.Basket;
 import entities.User;
 import java.util.ArrayList;
 import java.util.List;

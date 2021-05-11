@@ -1,5 +1,6 @@
 package entities;
 
+import entities.basket.Basket;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @Table(name = "users")
-// @NamedQuery(name = "Users.deleteAllRows", query = "DELETE from User")
+ @NamedQuery(name = "User.deleteAllRows", query = "DELETE from User")
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;

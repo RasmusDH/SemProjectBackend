@@ -5,7 +5,7 @@
  */
 package dtos;
 
-import entities.BasketItem;
+import entities.basket.BasketItem;
 import java.util.ArrayList;
 import java.util.List;
 

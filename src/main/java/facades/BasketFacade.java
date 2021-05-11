@@ -7,9 +7,9 @@ package facades;
 
 import dtos.BasketDTO;
 import dtos.BasketItemDTO;
-import entities.Basket;
-import entities.BasketItem;
-import entities.BasketRepository;
+import entities.basket.Basket;
+import entities.basket.BasketItem;
+import entities.basket.BasketRepository;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

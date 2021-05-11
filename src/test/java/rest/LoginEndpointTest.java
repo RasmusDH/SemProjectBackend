@@ -64,7 +64,6 @@ public class LoginEndpointTest extends SetupRestTests {
             em.persist(user);
             em.persist(admin);
             em.persist(both);
-            //System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -80,11 +79,9 @@ public class LoginEndpointTest extends SetupRestTests {
         securityToken = given()
                 .contentType("application/json")
                 .body(json)
-                //.when().post("/api/login")
                 .when().post("/login")
                 .then()
                 .extract().path("token");
-        //System.out.println("TOKEN ---> " + securityToken);
     }
 
     private void logOut() {
