@@ -10,6 +10,7 @@ import dtos.BasketDTO;
 import dtos.BasketItemDTO;
 import entities.basket.BasketRepository;
 import facades.BasketFacade;
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -20,6 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import rest.provider.Provider;
+import security.UserPrincipal;
 import utils.EMF_Creator;
 
 /**
@@ -42,17 +44,8 @@ public class BasketResource extends Provider {
     @Context
     SecurityContext securityContext;
 
-    /**
-     * Creates a new instance of BasketResource
-     */
     public BasketResource() {
     }
-
-    /**
-     * Retrieves representation of an instance of rest.BasketResource
-     * @return an instance of java.lang.String
-     */
-   
 
     @Override
     public Response getById(int id) {
@@ -71,7 +64,8 @@ public class BasketResource extends Provider {
         BasketDTO basketDTO = REPO.create();
         return Response.ok(basketDTO).build();
     }
-    
+
+    @RolesAllowed({"user", "admin"})
     @Path("/add/{userName}")
     @POST
     public Response addItem(@PathParam("userName") String userName, String jsonBody) {
@@ -83,6 +77,15 @@ public class BasketResource extends Provider {
       
       return Response.ok(basketDTO).build();
         
+    }
+
+    @RolesAllowed({"user", "admin"})
+    @GET
+    @Path("/active")
+    public Response getUsersActiveBasket() {
+        String username = securityContext.getUserPrincipal().getName();
+        BasketDTO basketDTO = REPO.getUsersActiveBasket(username);
+        return Response.ok(GSON.toJson(basketDTO)).build();
     }
 
     @Override

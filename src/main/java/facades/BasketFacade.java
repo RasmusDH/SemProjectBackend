@@ -7,6 +7,7 @@ package facades;
 
 import dtos.BasketDTO;
 import dtos.BasketItemDTO;
+import dtos.UserDTO;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
 import entities.basket.BasketRepository;
@@ -16,14 +17,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
 
 /**
- *
  * @author peter
  */
 public class BasketFacade implements BasketRepository {
-    
+
     private static BasketFacade instance;
     private static EntityManagerFactory emf;
-    
+
     public static BasketFacade getInstance(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -31,83 +31,102 @@ public class BasketFacade implements BasketRepository {
         }
         return instance;
     }
-    
+
     @Override
     public BasketDTO create() throws WebApplicationException {
-        
+
         EntityManager em = emf.createEntityManager();
-                
+
         Basket basket = new Basket();
-        
-        try{
-           em.getTransaction().begin();
-           em.persist(basket);
-           em.getTransaction().commit();
-            
+
+        try {
+            em.getTransaction().begin();
+            em.persist(basket);
+            em.getTransaction().commit();
+
         } finally {
             em.close();
         }
-        return new BasketDTO(basket);   
+        return new BasketDTO(
+            basket.getId(),
+            new UserDTO(),
+            BasketItemDTO.getAllasketItemDtoes(basket.getItems())
+        );
     }
 
     @Override
-    public BasketDTO addToBasket(String userName, BasketItemDTO basketItemDTO) throws WebApplicationException {
+    public BasketDTO addToBasket(String userName, BasketItemDTO basketItemDTO)
+        throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         BasketItem basketItem = new BasketItem(basketItemDTO);
-        
+
         Basket b;
-              
-        try{
+
+        try {
             em.getTransaction().begin();
-            
+
             try {
-            b = (Basket)em.createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = 1")
-            .setParameter("userName", userName)
-            .getSingleResult();
-            
-            System.out.println("Basket found" + b);
-            
-            } catch (Exception e){
-               
+                b = (Basket) em
+                    .createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = 1")
+                    .setParameter("userName", userName)
+                    .getSingleResult();
+
+                System.out.println("Basket found" + b);
+
+            } catch (Exception e) {
+
                 User u = em.find(User.class, userName);
                 b = new Basket(u);
                 System.out.println(u);
                 em.persist(b);
-                
+
                 System.out.println("Basket not found" + b);
-            } 
-//                if (b == null) {
-//                    User u = em.find(User.class, userName);
-//                b = new Basket(u);
-//                } 
-                
+            }
+
             b.addItems(basketItem);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
         return new BasketDTO(b);
-        
-        
+
+
     }
 
     @Override
     public BasketDTO getBasket(Long id) throws WebApplicationException {
-        
+
         EntityManager em = emf.createEntityManager();
         Basket b;
-              
-            b = em.find(Basket.class, id);
-                if (b == null) {
-                throw new WebApplicationException(String.format("Basket with id: (%d) not found", id),
-                        400);
-                }
-            em.close();
-            
+
+        b = em.find(Basket.class, id);
+        if (b == null) {
+            throw new WebApplicationException(String.format("Basket with id: (%d) not found", id),
+                400);
+        }
+        em.close();
+
         return new BasketDTO(b);
-        
-        
-    
+
+
     }
-    
+
+    @Override
+    public BasketDTO getUsersActiveBasket(String userName) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Basket basket = em.createQuery(
+                "SELECT b FROM Basket b"
+                    + " WHERE b.user.userName = :userName"
+                    + " AND b.active = true", Basket.class)
+                .setParameter("userName", userName)
+                .getSingleResult();
+            return new BasketDTO(basket);
+        } catch (Exception e) {
+            throw new WebApplicationException("User has no basket", 400);
+        } finally {
+            em.close();
+        }
+    }
+
 }
