@@ -132,23 +132,31 @@ public class BasketFacade implements BasketRepository {
 
     @Override
     public BasketItemDTO editBasket(EditBasketType type, Long itemId) throws WebApplicationException {
+        EditBasket editBasket = new EditBasket(emf);
         switch (type) {
             case DELETE:
-                return deleteItemFromBasket(itemId);
+                return editBasket.deleteItemFromBasket(itemId);
             case INCREMENT:
-                return changeItemAmount(ChangeType.INCREMENT, itemId);
+                return editBasket.changeItemAmount(ChangeType.INCREMENT, itemId);
             case DECREMENT:
-                return changeItemAmount(ChangeType.DECREMENT, itemId);
+                return editBasket.changeItemAmount(ChangeType.DECREMENT, itemId);
             default:
                 throw new WebApplicationException("Unknown edit command: " + type.name());
         }
     }
 
-    enum ChangeType {
-        INCREMENT, DECREMENT
+}
+
+
+class EditBasket {
+
+    private final EntityManagerFactory emf;
+
+    EditBasket(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
-    private BasketItemDTO changeItemAmount(ChangeType changeType, Long itemId) {
+    public BasketItemDTO changeItemAmount(ChangeType changeType, Long itemId) {
         EntityManager em = emf.createEntityManager();
         try {
             BasketItem basketItem = em.find(BasketItem.class, itemId);
@@ -176,7 +184,7 @@ public class BasketFacade implements BasketRepository {
         }
     }
 
-    private BasketItemDTO deleteItemFromBasket(Long itemId) {
+    public BasketItemDTO deleteItemFromBasket(Long itemId) {
         EntityManager em = emf.createEntityManager();
         try {
             BasketItem basketItem = em.find(BasketItem.class, itemId);
@@ -193,4 +201,8 @@ public class BasketFacade implements BasketRepository {
         }
     }
 
+}
+
+enum ChangeType {
+    INCREMENT, DECREMENT
 }
