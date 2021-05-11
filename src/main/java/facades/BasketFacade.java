@@ -68,7 +68,8 @@ public class BasketFacade implements BasketRepository {
 
             try {
                 b = (Basket) em
-                    .createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true")
+                    .createQuery(
+                        "SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true")
                     .setParameter("userName", userName)
                     .getSingleResult();
 
@@ -160,8 +161,9 @@ class EditBasket {
         EntityManager em = emf.createEntityManager();
         try {
             BasketItem basketItem = em.find(BasketItem.class, itemId);
-            if (basketItem == null)
+            if (basketItem == null) {
                 throw new WebApplicationException("Unknown item with id: " + itemId);
+            }
 
             em.getTransaction().begin();
             basketItem.setAmount(getNewItemAmount(basketItem, changeType));
@@ -188,8 +190,9 @@ class EditBasket {
         EntityManager em = emf.createEntityManager();
         try {
             BasketItem basketItem = em.find(BasketItem.class, itemId);
-            if (basketItem == null)
+            if (basketItem == null) {
                 throw new WebApplicationException("Could not find basketItem with id: " + itemId);
+            }
 
             em.getTransaction().begin();
             basketItem.getBasket().getItems().remove(basketItem);
