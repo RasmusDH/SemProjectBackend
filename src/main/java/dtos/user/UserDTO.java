@@ -1,4 +1,4 @@
-package dtos;
+package dtos.user;
 
 import entities.User;
 import java.util.List;

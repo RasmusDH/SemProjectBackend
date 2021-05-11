@@ -6,8 +6,8 @@
 package rest;
 
 import com.google.gson.Gson;
-import dtos.BasketDTO;
-import dtos.BasketItemDTO;
+import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
 import entities.basket.BasketRepository;
 import facades.BasketFacade;
 import javax.annotation.security.RolesAllowed;
@@ -21,7 +21,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import rest.provider.Provider;
-import security.UserPrincipal;
 import utils.EMF_Creator;
 
 /**
@@ -31,13 +30,12 @@ import utils.EMF_Creator;
  */
 @Path("basket")
 public class BasketResource extends Provider {
-    
-   
-    
+
+
     Gson gson = new Gson();
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
-    private static final BasketRepository REPO =  BasketFacade.getInstance(EMF);
-    
+    private static final BasketRepository REPO = BasketFacade.getInstance(EMF);
+
     @Context
     private UriInfo context;
 
@@ -55,9 +53,10 @@ public class BasketResource extends Provider {
 
     @Override
     public Response getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Path("/create")
     @GET
     public Response create() {
@@ -66,17 +65,17 @@ public class BasketResource extends Provider {
     }
 
     @RolesAllowed({"user", "admin"})
-    @Path("/add/{userName}")
+    @Path("/add")
     @POST
-    public Response addItem(@PathParam("userName") String userName, String jsonBody) {
-               
-      BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
-      BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
-      
-      System.out.println(basketDTO);
-      
-      return Response.ok(basketDTO).build();
-        
+    public Response addItem(String jsonBody) {
+        String userName = securityContext.getUserPrincipal().getName();
+        BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
+        BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
+
+        System.out.println(basketDTO);
+
+        return Response.ok(basketDTO).build();
+
     }
 
     @RolesAllowed({"user", "admin"})
@@ -90,16 +89,19 @@ public class BasketResource extends Provider {
 
     @Override
     public Response update(int id, String jsonBody) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Response delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Response create(String jsonBody) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
