@@ -141,13 +141,14 @@ public class BasketResourceTest extends SetupRestTests {
         @DisplayName("should increment item amount")
         void shouldIncrementItemAmount() {
             String token = login("user", "1234");
-            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.INCREMENT, oldId);
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.INCREMENT);
             given()
                 .contentType(ContentType.JSON)
                 .header("x-access-token", token)
                 .body(requestBody)
                 .when()
-                .put("/basket/edit")
+                .pathParam("id", oldId)
+                .put("/basket/{id}")
                 .then()
                 .statusCode(200)
                 .body("amount", Matchers.equalTo((int) oldAmount + 1));
@@ -157,13 +158,14 @@ public class BasketResourceTest extends SetupRestTests {
         @DisplayName("should decrement item amount")
         void shouldDecrementItemAmount() {
             String token = login("user", "1234");
-            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DECREMENT, oldId);
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DECREMENT);
             given()
                 .contentType(ContentType.JSON)
                 .header("x-access-token", token)
                 .body(requestBody)
                 .when()
-                .put("/basket/edit")
+                .pathParam("id", oldId)
+                .put("/basket/{id}")
                 .then()
                 .statusCode(200)
                 .body("amount", Matchers.equalTo((int) oldAmount - 1));
@@ -173,13 +175,14 @@ public class BasketResourceTest extends SetupRestTests {
         @DisplayName("should delete item")
         void shouldDeleteItem() {
             String token = login("user", "1234");
-            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DELETE, oldId);
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DELETE);
             given()
                 .contentType(ContentType.JSON)
                 .header("x-access-token", token)
                 .body(requestBody)
                 .when()
-                .put("/basket/edit")
+                .pathParam("id", oldId)
+                .put("/basket/{id}")
                 .then()
                 .statusCode(200);
         }
@@ -187,12 +190,13 @@ public class BasketResourceTest extends SetupRestTests {
         @Test
         @DisplayName("should throw exception if not logged in")
         void shouldThrowExceptionIfNotLoggedIn() {
-            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DELETE, oldId);
+            EditBasketDTO requestBody = new EditBasketDTO(EditBasketType.DELETE);
             given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
-                .put("/basket/edit")
+                .pathParam("id", oldId)
+                .put("/basket/{id}")
                 .then()
                 .statusCode(403);
         }

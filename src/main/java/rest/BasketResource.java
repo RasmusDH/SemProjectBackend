@@ -89,19 +89,12 @@ public class BasketResource extends Provider {
         return Response.ok(GSON.toJson(basketDTO)).build();
     }
 
-    @PUT
-    @Path("/edit")
-    @RolesAllowed({"user", "admin"})
-    public Response editBasket(String jsonBody) {
-        EditBasketDTO editBasketDTO = GSON.fromJson(jsonBody, EditBasketDTO.class);
-        BasketItemDTO basketItemDTO = REPO.editBasket(editBasketDTO.getType(), editBasketDTO.getItemId());
-        return Response.ok(basketItemDTO).build();
-    }
-
     @Override
+    @RolesAllowed({"user", "admin"})
     public Response update(int id, String jsonBody) {
-        throw new UnsupportedOperationException(
-            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EditBasketDTO editBasketDTO = GSON.fromJson(jsonBody, EditBasketDTO.class);
+        BasketItemDTO basketItemDTO = REPO.editBasket(editBasketDTO.getType(), (long) id);
+        return Response.ok(basketItemDTO).build();
     }
 
     @Override
