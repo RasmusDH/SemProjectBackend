@@ -43,6 +43,8 @@ public class UserResourceTest extends SetupRestTests {
         Role role = new Role("user");
         try {
             em.getTransaction().begin();
+            em.createQuery("DELETE FROM Role").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
             em.persist(role);
             em.getTransaction().commit();
         }  finally {       
@@ -51,22 +53,6 @@ public class UserResourceTest extends SetupRestTests {
         
     }
     
-    @AfterEach
-    public void tearDown() {
-          EntityManager em = emf.createEntityManager();
-        
-           try {
-                em.getTransaction().begin();
-                em.createQuery("DELETE FROM Role").executeUpdate();
-                em.createQuery("DELETE FROM User").executeUpdate();
-                em.getTransaction().commit();
-            } finally {
-                em.close();
-            }
-        
-        
-    }
-
     @Test
     public void testCreate() {
         UserDTO requestBody = new UserDTO("Hans", "e.mand");
