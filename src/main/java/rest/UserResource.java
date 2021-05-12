@@ -27,7 +27,7 @@ import rest.provider.Provider;
  *
  * @author peter
  */
-@Path("User")
+@Path("user")
 public class UserResource extends Provider {
     
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();  

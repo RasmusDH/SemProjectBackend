@@ -6,24 +6,26 @@
 package rest;
 
 import dtos.UserDTO;
+import entities.Role;
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
-import javax.ws.rs.core.Response;
+import javax.persistence.EntityManager;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static rest.SetupRestTests.emf;
 import static rest.SetupRestTests.setupServer;
 import static rest.SetupRestTests.shutdownServer;
+
 
 /**
  *
  * @author peter
  */
-public class UserResourceTest {
+public class UserResourceTest extends SetupRestTests {
     
     @BeforeAll
     static void setUpClass() {
@@ -34,6 +36,36 @@ public class UserResourceTest {
     static void closeTestServer() {
         shutdownServer();
     }
+    
+     @BeforeEach
+    public void setUp() {
+        EntityManager em = emf.createEntityManager();
+        Role role = new Role("user");
+        try {
+            em.getTransaction().begin();
+            em.persist(role);
+            em.getTransaction().commit();
+        }  finally {       
+        }
+        em.close();
+        
+    }
+    
+    @AfterEach
+    public void tearDown() {
+          EntityManager em = emf.createEntityManager();
+        
+           try {
+                em.getTransaction().begin();
+                em.createQuery("DELETE FROM Role").executeUpdate();
+                em.createQuery("DELETE FROM User").executeUpdate();
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        
+        
+    }
 
     @Test
     public void testCreate() {
@@ -42,7 +74,7 @@ public class UserResourceTest {
             .contentType(ContentType.JSON)
             .body(requestBody)
             .when()
-            .post("/basket/add/user")
+            .post("/user")
             .then()
             .assertThat()
             .statusCode(HttpStatus.OK_200.getStatusCode());
