@@ -4,10 +4,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dtos;
+package dtos.basket;
 
+import dtos.user.UserDTO;
 import entities.basket.Basket;
-import entities.User;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +21,10 @@ public class BasketDTO {
     private Long id;
     private boolean active;
        
-    private User user;
+    private UserDTO user;
     private List<BasketItemDTO> items;
 
-    public BasketDTO(Long id, User user, List<BasketItemDTO> items) {
+    public BasketDTO(Long id, UserDTO user, List<BasketItemDTO> items) {
         this.id = id;
         this.user = user;
         this.items = items;
@@ -33,12 +33,18 @@ public class BasketDTO {
     public BasketDTO(Basket basket) {
         this.id = basket.getId();
         this.items = BasketItemDTO.getAllasketItemDtoes(basket.getItems());
-        this.user = basket.getUser();
+        this.user = new UserDTO(basket.getUser());
     }
     
     public List<BasketDTO> getAllBasketDtoes(List<Basket> bsList) {
         List<BasketDTO> bsDTO = new ArrayList<>();
-        bsList.forEach(bs -> bsDTO.add(new BasketDTO(bs)));
+        bsList.forEach(bs -> bsDTO.add(
+            new BasketDTO(
+                bs.getId(),
+                new UserDTO(bs.getUser()),
+                BasketItemDTO.getAllasketItemDtoes(bs.getItems())
+            )
+        ));
         return bsDTO;
     }
 

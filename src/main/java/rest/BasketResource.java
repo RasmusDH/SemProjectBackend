@@ -6,10 +6,11 @@
 package rest;
 
 import com.google.gson.Gson;
-import dtos.BasketDTO;
-import dtos.BasketItemDTO;
+import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
 import entities.basket.BasketRepository;
 import facades.BasketFacade;
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -29,30 +30,20 @@ import utils.EMF_Creator;
  */
 @Path("basket")
 public class BasketResource extends Provider {
-    
-   
-    
+
+
     Gson gson = new Gson();
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
-    private static final BasketRepository REPO =  BasketFacade.getInstance(EMF);
-    
+    private static final BasketRepository REPO = BasketFacade.getInstance(EMF);
+
     @Context
     private UriInfo context;
 
     @Context
     SecurityContext securityContext;
 
-    /**
-     * Creates a new instance of BasketResource
-     */
     public BasketResource() {
     }
-
-    /**
-     * Retrieves representation of an instance of rest.BasketResource
-     * @return an instance of java.lang.String
-     */
-   
 
     @Override
     public Response getById(int id) {
@@ -62,41 +53,55 @@ public class BasketResource extends Provider {
 
     @Override
     public Response getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Path("/create")
     @GET
     public Response create() {
         BasketDTO basketDTO = REPO.create();
         return Response.ok(basketDTO).build();
     }
-    
-    @Path("/add/{userName}")
+
+    @RolesAllowed({"user", "admin"})
+    @Path("/add")
     @POST
-    public Response addItem(@PathParam("userName") String userName, String jsonBody) {
-               
-      BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
-      BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
-      
-      System.out.println(basketDTO);
-      
-      return Response.ok(basketDTO).build();
-        
+    public Response addItem(String jsonBody) {
+        String userName = securityContext.getUserPrincipal().getName();
+        BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
+        BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
+
+        System.out.println(basketDTO);
+
+        return Response.ok(basketDTO).build();
+
+    }
+
+    @RolesAllowed({"user", "admin"})
+    @GET
+    @Path("/active")
+    public Response getUsersActiveBasket() {
+        String username = securityContext.getUserPrincipal().getName();
+        BasketDTO basketDTO = REPO.getUsersActiveBasket(username);
+        return Response.ok(GSON.toJson(basketDTO)).build();
     }
 
     @Override
     public Response update(int id, String jsonBody) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Response delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Response create(String jsonBody) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

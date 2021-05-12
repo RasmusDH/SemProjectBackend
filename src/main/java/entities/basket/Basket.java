@@ -46,20 +46,11 @@ public class Basket implements Serializable {
         this.user = user;
     }
     
-
-    public Basket() {       
+    public Basket() {
         this.items = new ArrayList<>();
         this.active = true;
     }
-//    
-//    public Basket(BasketDTO basketDTO) {
-//       this.id = basketDTO.getId();
-//       this.items = new ArrayList<>();
-//       for (BasketItemDTO bdtos: basketDTO.getItems()) {
-//           items.add(new BasketItem(bdtos));
-//       }      
-//    }
-    
+
     public void addItems(BasketItem basketItem) {
      if (basketItem != null) {    
          this.items.add(basketItem);
