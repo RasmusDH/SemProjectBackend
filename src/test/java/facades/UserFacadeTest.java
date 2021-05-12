@@ -41,6 +41,8 @@ public class UserFacadeTest {
         Role role = new Role("user");
         try {
             em.getTransaction().begin();
+            em.createQuery("DELETE FROM Role").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
             em.persist(role);
             em.getTransaction().commit();
         }  finally {       
@@ -48,33 +50,6 @@ public class UserFacadeTest {
         em.close();
         
     }
-    
-    @AfterEach
-    public void tearDown() {
-        emf = EMF_Creator.createEntityManagerFactoryForTest();
-          EntityManager em = emf.createEntityManager();
-        
-           try {
-                em.getTransaction().begin();
-                em.createQuery("DELETE FROM Role").executeUpdate();
-                em.createQuery("DELETE FROM User").executeUpdate();
-                em.getTransaction().commit();
-            } finally {
-                em.close();
-            }
-        
-        
-    }
-
-//    @Test
-//    public void testGetUserFacade() {
-//        System.out.println("getUserFacade");
-//        EntityManagerFactory _emf = null;
-//        UserFacade expResult = null;
-//        UserFacade result = UserFacade.getUserFacade(_emf);
-//        assertEquals(expResult, result);
-//        fail("The test case is a prototype.");
-//    }
 
     @Test
     public void testCreate() {
@@ -82,18 +57,5 @@ public class UserFacadeTest {
          UserDTO result = facade.create(new UserDTO("Hansemanderne", "2"));
          assertEquals("Hansemanderne", result.getUserName());
          assertNotNull(result);
-    }
-
-//    @Test
-//    public void testGetVeryfiedUser() throws Exception {
-//        System.out.println("getVeryfiedUser");
-//        String username = "";
-//        String password = "";
-//        UserFacade instance = null;
-//        User expResult = null;
-//        User result = instance.getVeryfiedUser(username, password);
-//        assertEquals(expResult, result);
-//        fail("The test case is a prototype.");
-//    }
-    
+    }    
 }
