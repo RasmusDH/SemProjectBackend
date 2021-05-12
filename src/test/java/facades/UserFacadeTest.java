@@ -41,8 +41,10 @@ public class UserFacadeTest {
         Role role = new Role("user");
         try {
             em.getTransaction().begin();
+            em.createQuery("DELETE FROM BasketItem").executeUpdate();
+            em.createQuery("DELETE FROM Basket").executeUpdate();
             em.createQuery("DELETE FROM Role").executeUpdate();
-            em.createQuery("DELETE FROM User").executeUpdate();
+            em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.persist(role);
             em.getTransaction().commit();
         }  finally {       
