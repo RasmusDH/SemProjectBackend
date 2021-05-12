@@ -5,7 +5,6 @@
  */
 package dtos;
 
-import entities.Role;
 import entities.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +18,19 @@ public class UserDTO {
     
     
     private String userName;
-    private String hashPassword;
+    private String password;
     private List<RoleDTO> roles = new ArrayList<>();
 
-    public UserDTO(String userName, String hashPassword) {
+    public UserDTO(String userName, String password) {
        
         this.userName = userName;
-        this.hashPassword = hashPassword;
+        this.password = password;
        
     }
 
     public UserDTO(User user) {
         this.userName = user.getUserName();
-        this.hashPassword = user.getUserPass(); 
+        this.password = user.getUserPass();
         this.roles = RoleDTO.getAllRoleDtoes(user.getRoleList());
     }
     
@@ -54,12 +53,12 @@ public class UserDTO {
         this.userName = userName;
     }
 
-    public String getHashPassword() {
-        return hashPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHashPassword(String hashPassword) {
-        this.hashPassword = hashPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<RoleDTO> getRoles() {
@@ -74,7 +73,7 @@ public class UserDTO {
     public int hashCode() {
         int hash = 7;
         hash = 53 * hash + Objects.hashCode(this.userName);
-        hash = 53 * hash + Objects.hashCode(this.hashPassword);
+        hash = 53 * hash + Objects.hashCode(this.password);
         hash = 53 * hash + Objects.hashCode(this.roles);
         return hash;
     }
@@ -94,7 +93,7 @@ public class UserDTO {
         if (!Objects.equals(this.userName, other.userName)) {
             return false;
         }
-        if (!Objects.equals(this.hashPassword, other.hashPassword)) {
+        if (!Objects.equals(this.password, other.password)) {
             return false;
         }
       
@@ -106,7 +105,7 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" + "userName=" + userName + ", hashPassword=" + hashPassword + '}';
+        return "UserDTO{" + "userName=" + userName + ", hashPassword=" + password + '}';
     }
     
     

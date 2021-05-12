@@ -21,7 +21,6 @@ public class UserFacade implements UserRepository {
     }
 
     /**
-     *
      * @param _emf
      * @return the instance of this facade.
      */
@@ -32,15 +31,35 @@ public class UserFacade implements UserRepository {
         }
         return instance;
     }
-    
+
+    public boolean isValidUserCredentials(UserDTO userDTO) {
+        if (userDTO.getUserName() == null) {
+            return false;
+        }
+        if (userDTO.getPassword() == null) {
+            return false;
+        }
+        if (userDTO.getUserName().isEmpty()) {
+            return false;
+        }
+        if (userDTO.getPassword().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public UserDTO create(UserDTO userDTO) throws WebApplicationException {
-        
-         // We create a User with user 'Role' - not admin. 
+
+        if (!isValidUserCredentials(userDTO)) {
+            throw new WebApplicationException("Invalid JSON supplied for signup", 403);
+        }
+
+        // We create a User with user 'Role' - not admin.
         EntityManager em = emf.createEntityManager();
-        User user = new User(userDTO.getUserName(),userDTO.getHashPassword());  
-        
-        try{ 
+        User user = new User(userDTO.getUserName(), userDTO.getPassword());
+
+        try {
             em.getTransaction().begin();
             Role role = em.find(Role.class, "user");
             user.addRole(role);
@@ -53,8 +72,7 @@ public class UserFacade implements UserRepository {
         }
         return new UserDTO(user);
     }
-        
-    
+
 
     public User getVeryfiedUser(String username, String password) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
