@@ -15,10 +15,13 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
@@ -197,6 +200,45 @@ public class LoginEndpointTest extends SetupRestTests {
                 .statusCode(403)
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
+    }
+
+    @Test
+    @DisplayName("validate token should return user and token if token is valid")
+    void validateTokenShouldReturnUserAndTokenIfTokenIsValid() {
+        login("user", "test");
+        given()
+            .contentType(ContentType.JSON)
+            .header("x-access-token", securityToken)
+            .when()
+            .get("/login/validate-token")
+            .then()
+            .statusCode(200)
+            .body("username", equalTo("user"))
+            .body("token", equalTo(securityToken));
+    }
+
+    @Test
+    @DisplayName("validate token should throw exception if token is expired or invalid")
+    void validateTokenShouldThrowExceptionIfTokenIsExpiredOrInvalid() {
+        logOut();
+        given()
+            .contentType(ContentType.JSON)
+            .header("x-access-token", "31232131adadasddsad")
+            .when()
+            .get("/login/validate-token")
+            .then()
+            .statusCode(403);
+    }
+
+    @Test
+    @DisplayName("validate token should throw exception if no token is provided")
+    void validateTokenShouldThrowExceptionIfNoTokenIsProvided() {
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .get("/login/validate-token")
+            .then()
+            .statusCode(403);
     }
 
 }
