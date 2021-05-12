@@ -56,7 +56,11 @@ public class BasketItem implements Serializable {
     public void setBasket(Basket basket) {
         this.basket = basket;
     }
-    
+
+    public Basket getBasket() {
+        return basket;
+    }
+
     public String getRestaurantName() {
         return restaurantName;
     }

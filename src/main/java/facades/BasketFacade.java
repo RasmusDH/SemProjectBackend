@@ -12,6 +12,9 @@ import entities.basket.Basket;
 import entities.basket.BasketItem;
 import entities.basket.BasketRepository;
 import entities.User;
+import entities.basket.ChangeType;
+import entities.basket.EditBasket;
+import entities.basket.EditBasketType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
@@ -67,7 +70,8 @@ public class BasketFacade implements BasketRepository {
 
             try {
                 b = (Basket) em
-                    .createQuery("SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = 1")
+                    .createQuery(
+                        "SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true")
                     .setParameter("userName", userName)
                     .getSingleResult();
 
@@ -126,6 +130,21 @@ public class BasketFacade implements BasketRepository {
             throw new WebApplicationException("User has no basket", 400);
         } finally {
             em.close();
+        }
+    }
+
+    @Override
+    public BasketItemDTO editBasket(EditBasketType type, Long itemId) throws WebApplicationException {
+        EditBasket editBasket = new EditBasket(emf);
+        switch (type) {
+            case DELETE:
+                return editBasket.deleteItemFromBasket(itemId);
+            case INCREMENT:
+                return editBasket.changeItemAmount(ChangeType.INCREMENT, itemId);
+            case DECREMENT:
+                return editBasket.changeItemAmount(ChangeType.DECREMENT, itemId);
+            default:
+                throw new WebApplicationException("Unknown edit command: " + type.name());
         }
     }
 

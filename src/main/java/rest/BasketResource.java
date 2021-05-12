@@ -8,16 +8,18 @@ package rest;
 import com.google.gson.Gson;
 import dtos.basket.BasketDTO;
 import dtos.basket.BasketItemDTO;
+import dtos.basket.EditBasketDTO;
 import entities.basket.BasketRepository;
+import entities.basket.EditBasketType;
 import facades.BasketFacade;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import rest.provider.Provider;
@@ -88,9 +90,11 @@ public class BasketResource extends Provider {
     }
 
     @Override
+    @RolesAllowed({"user", "admin"})
     public Response update(int id, String jsonBody) {
-        throw new UnsupportedOperationException(
-            "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EditBasketDTO editBasketDTO = GSON.fromJson(jsonBody, EditBasketDTO.class);
+        BasketItemDTO basketItemDTO = REPO.editBasket(editBasketDTO.getType(), (long) id);
+        return Response.ok(basketItemDTO).build();
     }
 
     @Override

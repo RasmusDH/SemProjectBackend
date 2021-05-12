@@ -11,6 +11,7 @@ import entities.basket.Basket;
 import entities.Role;
 import entities.User;
 import entities.basket.BasketItem;
+import entities.basket.EditBasketType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
@@ -119,6 +120,45 @@ public class BasketFacadeTest {
         void getUsersActiveBasketWillReturnABasketIfUserHasABasket() {
             BasketDTO basketDTO = facade.getUsersActiveBasket(user.getUserName());
             assertNotNull(basketDTO.getId());
+        }
+
+        @Nested
+        @DisplayName("edit basket")
+        class editBasket {
+
+            private long oldId;
+            private long oldAmount;
+
+            @BeforeEach
+            void setUp() {
+                oldId = b1.getItems().get(0).getId();
+                oldAmount = b1.getItems().get(0).getAmount();
+            }
+
+            @Test
+            @DisplayName("should increase an items amount given increment")
+            void shouldIncreaseAnItemsAmountGivenIncrement() {
+                BasketItemDTO edited = facade.editBasket(EditBasketType.INCREMENT, oldId);
+                assertEquals(oldAmount, edited.getAmount() - 1);
+                assertEquals(oldId, edited.getId());
+            }
+
+            @Test
+            @DisplayName("should decrement item amount given decrement")
+            void shouldDecrementItemAmountGivenDecrement() {
+                BasketItemDTO edited = facade.editBasket(EditBasketType.DECREMENT, oldId);
+                assertEquals(oldAmount, edited.getAmount() + 1);
+                assertEquals(oldId, edited.getId());
+            }
+
+            @Test
+            @DisplayName("should delete item given delete")
+            void shouldDeleteItemGivenDelete() {
+                BasketItemDTO deleted = facade.editBasket(EditBasketType.DELETE, oldId);
+                assertNotNull(deleted);
+                assertFalse(b1.getItems().contains(new BasketItem(deleted)));
+            }
+
         }
 
     }
