@@ -5,9 +5,9 @@
  */
 package facades;
 
+import dtos.user.UserDTO;
 import dtos.basket.BasketDTO;
 import dtos.basket.BasketItemDTO;
-import dtos.user.UserDTO;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
 import entities.basket.BasketRepository;

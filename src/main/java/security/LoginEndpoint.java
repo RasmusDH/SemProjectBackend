@@ -10,7 +10,9 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import dtos.user.UserDTO;
 import facades.UserFacade;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,6 +20,8 @@ import java.util.logging.Logger;
 import entities.User;
 import javax.ws.rs.GET;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
 import utils.SetupTestUsers;
 import utils.errorhandling.API_Exception;
 import javax.ws.rs.Consumes;
@@ -78,6 +82,26 @@ public class LoginEndpoint {
             Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
         }
         throw new AuthenticationException("Invalid username or password! Please try again");
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/validate-token")
+    public Response validateToken(@Context ContainerRequestContext request) {
+        String token = request.getHeaderString("x-access-token");
+        if (token == null) {
+            throw new WebApplicationException("No token is present", 403);
+        }
+
+        try {
+            UserPrincipal userPrincipal = JWTAuthenticationFilter.getUserPrincipalFromTokenIfValid(token);
+            JsonObject response = new JsonObject();
+            response.addProperty("username", userPrincipal.getName());
+            response.addProperty("token", token);
+            return Response.ok(new Gson().toJson(response)).build();
+        } catch (ParseException | JOSEException | AuthenticationException e) {
+            throw new WebApplicationException("Token is not valid", 403);
+        }
     }
 
     private String createToken(String userName, List<String> roles) throws JOSEException {

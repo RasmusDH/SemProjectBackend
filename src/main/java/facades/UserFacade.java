@@ -1,6 +1,6 @@
 package facades;
 
-import dtos.UserDTO;
+import dtos.user.UserDTO;
 import entities.Role;
 import entities.User;
 import entities.UserRepository;

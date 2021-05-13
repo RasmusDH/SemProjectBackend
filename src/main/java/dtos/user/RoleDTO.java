@@ -1,22 +1,30 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dtos.user;
 
 import entities.Role;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ *
+ * @author peter
+ */
 public class RoleDTO {
-
-    private String roleName;
-
+    
+    String roleName;
 
     public RoleDTO(String roleName) {
         this.roleName = roleName;
     }
-
-    public static List<RoleDTO> getRoleDTOList(List<Role> roles) {
-        return roles.stream()
-            .map(role -> new RoleDTO(role.getRoleName()))
-            .collect(Collectors.toList());
+    
+     public static List<RoleDTO> getAllRoleDtoes(List<Role> roList) {
+        List<RoleDTO> roDTO = new ArrayList<>();
+        roList.forEach(ro -> roDTO.add(new RoleDTO(ro.getRoleName())));
+        return roDTO;
     }
 
     public String getRoleName() {
@@ -26,4 +34,7 @@ public class RoleDTO {
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
+    
+    
+    
 }
