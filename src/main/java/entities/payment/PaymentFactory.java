@@ -5,6 +5,7 @@
  */
 package entities.payment;
 
+import dtos.Order.PaymentFactoryDTO;
 import dtos.basket.BasketDTO;
 import javax.ws.rs.WebApplicationException;
 
@@ -14,14 +15,20 @@ import javax.ws.rs.WebApplicationException;
  */
 public class PaymentFactory {
        
-    public Payment getPayment(BasketDTO basketDTO, 
+    public Payment getPayment(PaymentFactoryDTO paymentFactoryDTO, 
             PaymentMethod paymentMethod) {
         switch(paymentMethod) {
             case SUSHI_LOVERS: {
-                return new PayToSushiLovers(basketDTO);
+                return new PayToSushiLovers(paymentFactoryDTO);
             } 
             case BANANA_LEAF: {
-                return new PayToBananaLeaf(basketDTO);
+                return new PayToBananaLeaf(paymentFactoryDTO);
+            }
+            case ALCOHOL: {
+                return new PayToAlcohol(paymentFactoryDTO);
+            }
+            case PIZZA_2610: {
+                return new PayToPizza2610(paymentFactoryDTO);
             }
             default: {
                 throw new WebApplicationException("Unknown paymentmethod " 

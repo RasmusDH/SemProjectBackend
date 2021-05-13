@@ -5,6 +5,7 @@
  */
 package entities.order;
 
+import dtos.Order.PaymentDTO;
 import dtos.basket.BasketDTO;
 import javax.ws.rs.WebApplicationException;
 
@@ -14,6 +15,6 @@ import javax.ws.rs.WebApplicationException;
  */
 public interface OrderRepository {
     
-    public void createOrder(BasketDTO basketDTO) throws WebApplicationException;
+    public void createOrder(PaymentDTO paymentDTO) throws WebApplicationException;
     
 }
