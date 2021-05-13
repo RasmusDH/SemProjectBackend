@@ -7,11 +7,13 @@ import dtos.restaurant.RestaurantDTO;
 import dtos.restaurant.RestaurantsDTO;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
+@Disabled
 class RestaurantFacadeTest {
 
     private static final RestaurantFacade facade = RestaurantFacade.getInstance();
