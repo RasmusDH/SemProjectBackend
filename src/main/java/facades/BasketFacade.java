@@ -64,7 +64,7 @@ public class BasketFacade implements BasketRepository {
         BasketItem basketItem = new BasketItem(basketItemDTO);
 
         Basket b;
-
+        
         try {
             em.getTransaction().begin();
 
@@ -75,7 +75,7 @@ public class BasketFacade implements BasketRepository {
                     .setParameter("userName", userName)
                     .getSingleResult();
 
-                System.out.println("Basket found" + b);
+                System.out.println("Basket found: " + b);
 
             } catch (Exception e) {
 
@@ -86,15 +86,53 @@ public class BasketFacade implements BasketRepository {
 
                 System.out.println("Basket not found" + b);
             }
+            
+                        
+            // Duplicate start        
+            // Add to exisiting basketItem or not then new basketItem 
+            // Check if item exist restaurantName/dishNumber 
+            // if exists + amount (basketItem.getAmount) 
+            
+            
+//            String restaurantName = basketItem.getRestaurantName();
+//            
+//            try {
+//                BasketItem newBasketItem = (BasketItem) em.createQuery(
+//                        "SELECT b FROM BasketItem b WHERE b.restaurantName = :restaurantName")
+//                    .setParameter("restaurantName", restaurantName)
+//                    .getSingleResult();
+//                
+//            if (basketItem.getDishNumber() == newBasketItem.getDishNumber()) {
+//                System.out.println("1 BasketItem amount" + basketItem.getAmount());
+//                System.out.println("newBasketItem amount" + newBasketItem.getAmount());
+//                
+//                basketItem.setAmount(basketItem.getAmount() + newBasketItem.getAmount());
+//                
+//                System.out.println("2 BasketItem amount" + basketItem.getAmount());
+//            
+//            } else {
+//               
+//                }
+//            
+//            } catch(Exception e) {
+//                throw new WebApplicationException ("newBasketItem not working");
+//            }            
+            
+            // Duplicate end        
 
             b.addItems(basketItem);
             em.getTransaction().commit();
+
         } finally {
             em.close();
         }
         return new BasketDTO(b);
-
-
+        
+      
+    }
+    
+    public static void main(String[] args) {
+        
     }
 
     @Override

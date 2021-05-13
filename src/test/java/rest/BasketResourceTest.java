@@ -88,7 +88,7 @@ public class BasketResourceTest extends SetupRestTests {
     @Test
     public void testAddItem() {
         String token = login("user", "1234");
-        BasketItemDTO requestBody = new BasketItemDTO("Sushi", 1, 2, 3.0);
+        BasketItemDTO requestBody = new BasketItemDTO("Sushi", 200, 1, 3.0);
         given()
             .contentType(ContentType.JSON)
             .header("x-access-token", token)
