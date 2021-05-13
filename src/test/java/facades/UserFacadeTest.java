@@ -21,39 +21,40 @@ import utils.EMF_Creator;
  */
 // @Disabled
 public class UserFacadeTest {
-    
+
     private static EntityManagerFactory emf;
     private static UserFacade facade;
-    
+
     private UserDTO userDTO;
-    
-    
+
     @BeforeEach
     public void setUp() {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
         facade = UserFacade.getUserFacade(emf);
-        
+
         EntityManager em = emf.createEntityManager();
         Role role = new Role("user");
         try {
             em.getTransaction().begin();
+
             em.createQuery("DELETE FROM BasketItem").executeUpdate();
             em.createQuery("DELETE FROM Basket").executeUpdate();
             em.createQuery("DELETE FROM Role").executeUpdate();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
+
             em.persist(role);
             em.getTransaction().commit();
-        }  finally {       
+        } finally {
         }
         em.close();
-        
+
     }
 
     @Test
     public void testCreate() {
-         System.out.println("create");
-         UserDTO result = facade.create(new UserDTO("Hansemanderne", "2"));
-         assertEquals("Hansemanderne", result.getUserName());
-         assertNotNull(result);
-    }    
+        System.out.println("create");
+        UserDTO result = facade.create(new UserDTO("Hansemanderne", "2"));
+        assertEquals("Hansemanderne", result.getUserName());
+        assertNotNull(result);
+    }
 }

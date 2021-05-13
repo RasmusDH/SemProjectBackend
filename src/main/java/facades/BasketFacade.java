@@ -64,7 +64,7 @@ public class BasketFacade implements BasketRepository {
         BasketItem basketItem = new BasketItem(basketItemDTO);
 
         Basket b;
-
+        
         try {
             em.getTransaction().begin();
 
@@ -75,7 +75,7 @@ public class BasketFacade implements BasketRepository {
                     .setParameter("userName", userName)
                     .getSingleResult();
 
-                System.out.println("Basket found" + b);
+                System.out.println("Basket found: " + b);
 
             } catch (Exception e) {
 
@@ -86,15 +86,32 @@ public class BasketFacade implements BasketRepository {
 
                 System.out.println("Basket not found" + b);
             }
+            
+            String restaurantName = basketItem.getRestaurantName();
+            try {
+                BasketItem oldBasketItem = (BasketItem) em.createQuery(
+                        "SELECT b FROM BasketItem b WHERE b.restaurantName = :restaurantName AND b.dishNumber = :dishNumber")
+                    .setParameter("restaurantName", restaurantName)
+                    .setParameter("dishNumber", basketItem.getDishNumber())
+                    .getSingleResult();
+                
+                oldBasketItem.setAmount(oldBasketItem.getAmount() + basketItem.getAmount());
 
-            b.addItems(basketItem);
-            em.getTransaction().commit();
+            } catch(Exception e) {
+                b.addItems(basketItem);
+            }            
+             em.getTransaction().commit();
+
         } finally {
             em.close();
         }
         return new BasketDTO(b);
-
-
+        
+      
+    }
+    
+    public static void main(String[] args) {
+        
     }
 
     @Override
