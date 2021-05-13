@@ -71,7 +71,7 @@ public class JWTAuthenticationFilter implements ContainerRequestFilter {
    return false;
  }
 
- private UserPrincipal getUserPrincipalFromTokenIfValid(String token)
+ protected static UserPrincipal getUserPrincipalFromTokenIfValid(String token)
          throws ParseException, JOSEException, AuthenticationException {
    SignedJWT signedJWT = SignedJWT.parse(token);
    //Is it a valid token (generated with our shared key)

@@ -5,7 +5,7 @@
  */
 package entities;
 
-import dtos.UserDTO;
+import dtos.user.UserDTO;
 import javax.ws.rs.WebApplicationException;
 
 /**

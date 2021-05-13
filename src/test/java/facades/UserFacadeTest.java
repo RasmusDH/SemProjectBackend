@@ -5,18 +5,14 @@
  */
 package facades;
 
-import dtos.UserDTO;
+import dtos.user.UserDTO;
 import entities.Role;
-import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Disabled;
+
 import utils.EMF_Creator;
 
 /**
