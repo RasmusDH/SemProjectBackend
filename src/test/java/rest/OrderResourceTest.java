@@ -16,6 +16,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class OrderResourceTest extends SetupRestTests {
@@ -70,23 +72,62 @@ class OrderResourceTest extends SetupRestTests {
             .extract().path("token");
     }
 
-    @Test
-    void create() {
-        ContactInformationDTO contactInformationDTO = new ContactInformationDTO(
-            "User", "user@user.com", "1231121", "UserRoad", "20.21.12"
-        );
-        CreditCardDTO creditCardDTO = new CreditCardDTO("12312313", "3211", "UserCard", "213");
-        PaymentDTO requestBody = new PaymentDTO("user", contactInformationDTO, creditCardDTO);
-        String token = login("user", "1234");
-        given()
-            .contentType(ContentType.JSON)
-            .header("x-access-token", token)
-            .body(requestBody)
-            .when()
-            .post("/order")
-            .then()
-            .statusCode(200);
+    @Nested
+    @DisplayName("create order")
+    class CreateOrder {
+
+        PaymentDTO requestBody;
+
+        @BeforeEach
+        void setUp() {
+            ContactInformationDTO contactInformationDTO = new ContactInformationDTO(
+                "User", "user@user.com", "1231121", "UserRoad", "20.21.12"
+            );
+            CreditCardDTO creditCardDTO = new CreditCardDTO("12312313", "3211", "UserCard", "213");
+            requestBody = new PaymentDTO("user", contactInformationDTO, creditCardDTO);
+        }
+
+        @Test
+        @DisplayName("should create an order and return 200 response")
+        void shouldCreateAnOrderAndReturn200Response() {
+            String token = login("user", "1234");
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .body(requestBody)
+                .when()
+                .post("/order")
+                .then()
+                .statusCode(200);
+        }
+
+        @Test
+        @DisplayName("should throw error if not logged in")
+        void shouldThrowErrorIfNotLoggedIn() {
+            given()
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post("/order")
+                .then()
+                .statusCode(403);
+        }
+
+        @Test
+        @DisplayName("should throw error if no payment information is provided")
+        void shouldThrowErrorIfNoPaymentInformationIsProvided() {
+            String token = login("user", "1234");
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .when()
+                .post("/order")
+                .then()
+                .statusCode(500);
+        }
+
     }
+
 
     @Test
     void getById() {
