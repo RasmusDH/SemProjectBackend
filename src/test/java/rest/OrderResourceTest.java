@@ -10,6 +10,7 @@ import entities.Role;
 import entities.User;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
+import entities.order.OrderEntity;
 import io.restassured.http.ContentType;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.AfterAll;
@@ -128,9 +129,65 @@ class OrderResourceTest extends SetupRestTests {
 
     }
 
+    @Nested
+    @DisplayName("get by id")
+    class GetById {
 
-    @Test
-    void getById() {
+        private OrderEntity order;
+
+        @BeforeEach
+        void setUp() {
+            EntityManager em = emf.createEntityManager();
+            try {
+                em.getTransaction().begin();
+                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", b1);
+                em.persist(order);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            EntityManager em = emf.createEntityManager();
+            try {
+                em.getTransaction().begin();
+                em.createQuery("DELETE FROM OrderEntity").executeUpdate();
+                em.createQuery("DELETE FROM BasketItem").executeUpdate();
+                em.createQuery("DELETE FROM Basket").executeUpdate();
+                em.createQuery("DELETE FROM Role").executeUpdate();
+                em.createNamedQuery("User.deleteAllRows").executeUpdate();
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+
+        @Test
+        @DisplayName("should return a 200 status code")
+        void shouldReturnA200StatusCode() {
+            given()
+                .contentType(ContentType.JSON)
+                .when()
+                .pathParam("id", order.getId())
+                .get("/order/{id}")
+                .then()
+                .statusCode(200);
+        }
+
+        @Test
+        @DisplayName("should throw error if id does not exist")
+        void shouldThrowErrorIfIdDoesNotExist() {
+            given()
+                .contentType(ContentType.JSON)
+                .when()
+                .pathParam("id", 1000000)
+                .get("/order/{id}")
+                .then()
+                .statusCode(404);
+        }
+
     }
 
 }

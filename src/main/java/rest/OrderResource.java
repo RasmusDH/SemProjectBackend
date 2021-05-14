@@ -44,7 +44,8 @@ public class OrderResource extends Provider{
 
     @Override
     public Response getById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        OrderDTO orderDTO = REPO.getOrderById((long) id);
+        return Response.ok(orderDTO).build();
     }
 
     @Override
