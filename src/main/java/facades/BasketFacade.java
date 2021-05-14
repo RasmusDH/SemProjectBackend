@@ -90,7 +90,7 @@ public class BasketFacade implements BasketRepository {
             String restaurantName = basketItem.getRestaurantName();
             try {
                 BasketItem oldBasketItem = (BasketItem) em.createQuery(
-                        "SELECT b FROM BasketItem b WHERE b.restaurantName = :restaurantName AND b.dishNumber = :dishNumber")
+                        "SELECT b FROM BasketItem b WHERE b.restaurantName = :restaurantName AND b.dishNumber = :dishNumber AND b.basket.active = true")
                     .setParameter("restaurantName", restaurantName)
                     .setParameter("dishNumber", basketItem.getDishNumber())
                     .getSingleResult();

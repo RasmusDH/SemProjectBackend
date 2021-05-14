@@ -5,6 +5,7 @@
  */
 package facades;
 
+import dtos.Order.OrderDTO;
 import dtos.Order.PaymentDTO;
 import dtos.Order.PaymentFactoryDTO;
 import dtos.basket.BasketDTO;
@@ -12,6 +13,7 @@ import dtos.basket.BasketItemDTO;
 import entities.User;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
+import entities.order.OrderEntity;
 import entities.order.OrderRepository;
 import entities.payment.Payment;
 import entities.payment.PaymentFactory;
@@ -78,18 +80,38 @@ public class OrderFacade implements OrderRepository {
                     }
                 };
                 Thread thread = new Thread(runnable);
-                thread.start();     
+                thread.start();
             }
         }
 
     }
 
-    // TODO return order when created.
     @Override
-    public void createOrder(PaymentDTO paymentDTO) throws WebApplicationException {
+    public OrderDTO createOrder(PaymentDTO paymentDTO) throws WebApplicationException {
         BasketDTO basketDTO = getBasketDTOFromUserName(paymentDTO.getUserName());
         PaymentFactoryDTO paymentFactoryDTO = new PaymentFactoryDTO(paymentDTO, basketDTO);
         makePaymentForProducts(paymentFactoryDTO);
+
+        EntityManager em = emf.createEntityManager();
+
+        Basket basket = em.find(Basket.class, basketDTO.getId());
+
+        OrderEntity order = new OrderEntity(paymentDTO.getContactInfo().getName(),
+                paymentDTO.getContactInfo().getEmail(),
+                paymentDTO.getContactInfo().getPhone(),
+                paymentDTO.getContactInfo().getAddress(),
+                paymentDTO.getContactInfo().getDelivery(),
+                basket);
+
+        try {
+            em.getTransaction().begin();
+            basket.setActive(false);
+            em.persist(order);
+            em.getTransaction().commit();
+            return new OrderDTO(order);
+        } finally {
+            em.close();
+        }
     }
 
     private PaymentMethod getPaymentMethod(String restaurantName) {

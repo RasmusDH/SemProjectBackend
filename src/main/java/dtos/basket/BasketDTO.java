@@ -36,7 +36,7 @@ public class BasketDTO {
         this.user = new UserDTO(basket.getUser());
     }
     
-    public List<BasketDTO> getAllBasketDtoes(List<Basket> bsList) {
+    public static List<BasketDTO> getAllBasketDtoes(List<Basket> bsList) {
         List<BasketDTO> bsDTO = new ArrayList<>();
         bsList.forEach(bs -> bsDTO.add(
             new BasketDTO(
