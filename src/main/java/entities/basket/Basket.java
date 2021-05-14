@@ -5,17 +5,24 @@
  */
 package entities.basket;
 
+import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
 import entities.User;
+import entities.order.OrderEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.Null;
 
 /**
  *
@@ -37,8 +44,12 @@ public class Basket implements Serializable {
         mappedBy = "basket",
         cascade = CascadeType.PERSIST
     )
-    
     private List<BasketItem> items;
+    
+    @OneToOne(mappedBy = "basket")
+    @JoinColumn(nullable = true)
+    private OrderEntity order;
+    
     
     public Basket(User user) {       
         this.items = new ArrayList<>();
@@ -49,6 +60,18 @@ public class Basket implements Serializable {
     public Basket() {
         this.items = new ArrayList<>();
         this.active = true;
+    }
+    
+    public static List<BasketItem> getAllasketItem(List<BasketItemDTO> bItems) {
+        List<BasketItem> items = new ArrayList<>();
+        bItems.forEach(item -> items.add(new BasketItem(item)));
+        return items;
+    }
+    
+    public Basket(BasketDTO basketDTO) {
+        this.items = getAllasketItem(basketDTO.getItems());
+        this.active = true;
+        this.id = basketDTO.getId();        
     }
 
     public void addItems(BasketItem basketItem) {
@@ -84,6 +107,14 @@ public class Basket implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
     }
     
     

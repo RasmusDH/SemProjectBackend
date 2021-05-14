@@ -5,9 +5,11 @@
  */
 package rest;
 
+import dtos.Order.OrderDTO;
 import dtos.Order.PaymentDTO;
 import entities.order.OrderRepository;
 import facades.OrderFacade;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -17,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import rest.provider.Provider;
 
 /**
@@ -29,6 +32,10 @@ public class OrderResource extends Provider{
     
     private static final OrderRepository REPO = OrderFacade.getInstance(EMF);
 
+    
+    @Context
+    SecurityContext securityContext;
+    
     @Context
     private UriInfo context;
 
@@ -46,10 +53,13 @@ public class OrderResource extends Provider{
     }
 
     @Override
+    @RolesAllowed({"user", "admin"})
     public Response create(String jsonBody) {
+        String userName = securityContext.getUserPrincipal().getName();
         PaymentDTO paymentDTO = GSON.fromJson(jsonBody, PaymentDTO.class);
-        REPO.createOrder(paymentDTO);
-        return Response.ok().build(); 
+        paymentDTO.setUserName(userName);
+        OrderDTO orderDTO = REPO.createOrder(paymentDTO);
+        return Response.ok(GSON.toJson(orderDTO)).build(); 
     }
 
     @Override

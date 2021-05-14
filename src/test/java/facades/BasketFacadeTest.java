@@ -56,6 +56,7 @@ public class BasketFacadeTest {
 
             try {
                 em.getTransaction().begin();
+                em.createQuery("DELETE FROM OrderEntity").executeUpdate();
                 em.createQuery("DELETE FROM BasketItem").executeUpdate();
                 em.createQuery("DELETE FROM Basket").executeUpdate();
                 em.createQuery("DELETE FROM Role").executeUpdate();

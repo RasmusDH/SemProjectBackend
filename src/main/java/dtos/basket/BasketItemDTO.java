@@ -44,6 +44,8 @@ public class BasketItemDTO {
         bItems.forEach(item -> bItemsDTO.add(new BasketItemDTO(item)));
         return bItemsDTO;
     }
+    
+    
 
     public String getRestaurantName() {
         return restaurantName;
