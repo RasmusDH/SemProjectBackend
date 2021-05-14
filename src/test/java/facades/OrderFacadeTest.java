@@ -59,11 +59,11 @@ public class OrderFacadeTest {
 
             em.persist(b1);
 
-            b1.addItems(new BasketItem("Sushi Lovers", 2, 24, 9.99));
-            b1.addItems(new BasketItem("Banana leaf", 1, 43, 2.01));
-            b1.addItems(new BasketItem("Night shop", 2, 44, 3.06));
-            b1.addItems(new BasketItem("Pizza 2610", 5, 11, 5.56));
-            b1.addItems(new BasketItem("Sushi Lovers", 2, 24, 9.99));
+            b1.addItems(new BasketItem("Sushi Lovers", 2, "Maki", 24, 9.99));
+            b1.addItems(new BasketItem("Banana leaf",  1, "Curry", 43, 2.01));
+            b1.addItems(new BasketItem("Night shop",  2, "Beer", 44, 3.06));
+            b1.addItems(new BasketItem("Pizza 2610", 5, "Margaritha", 11, 5.56));
+            b1.addItems(new BasketItem("Sushi Lovers", 2, "Maki2", 24, 9.99));
             em.getTransaction().commit();
         } finally {
             em.close();

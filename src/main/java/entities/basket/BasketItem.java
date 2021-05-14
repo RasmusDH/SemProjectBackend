@@ -27,6 +27,7 @@ public class BasketItem implements Serializable {
     
     
     private String restaurantName;
+    private String itemName;
     private int dishNumber;
     private int amount;
     private double price;
@@ -35,11 +36,12 @@ public class BasketItem implements Serializable {
     private Basket basket;
     
    
-    public BasketItem(String restaurantName, int dishNumber, int amount, double price) {
+    public BasketItem(String restaurantName, int dishNumber, String itemName, int amount, double price) {
         this.restaurantName = restaurantName;
         this.dishNumber = dishNumber;
         this.amount = amount;
         this.price = price;
+        this.itemName = itemName;
     }
 
     public BasketItem(BasketItemDTO basketItemDTO) {
@@ -48,6 +50,7 @@ public class BasketItem implements Serializable {
         this.dishNumber = basketItemDTO.getDishNumber();
         this.amount = basketItemDTO.getAmount();
         this.price = basketItemDTO.getPrice();
+        this.itemName = basketItemDTO.getItemName();
     }
     
     public BasketItem() {
@@ -91,6 +94,14 @@ public class BasketItem implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
     
     
