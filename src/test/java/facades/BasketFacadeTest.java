@@ -66,7 +66,7 @@ public class BasketFacadeTest {
                 b2 = new Basket();
                 em.persist(b1);
                 em.persist(b2);
-                b1.addItems(new BasketItem("Sushi", 2, 24, 9.99));
+                b1.addItems(new BasketItem("Sushi", 2, "Maki", 24, 9.99));
                 em.getTransaction().commit();
             } finally {
                 em.close();
@@ -93,7 +93,7 @@ public class BasketFacadeTest {
         @Test
         public void testAddToBasket() {
             System.out.println("addToBasket");
-            BasketItemDTO basketItemDTO = new BasketItemDTO("PIZZA2610", 1, 2, 3);
+            BasketItemDTO basketItemDTO = new BasketItemDTO("PIZZA2610", 1, "Margaritha", 2, 3);
             BasketDTO bDto = facade.addToBasket("basketUser", basketItemDTO);
             assertEquals(2, bDto.getItems().size());
             assertEquals("PIZZA2610", bDto.getItems().get(1).getRestaurantName());

@@ -5,6 +5,8 @@
  */
 package facades;
 
+import dtos.Order.PaymentDTO;
+import dtos.Order.PaymentFactoryDTO;
 import dtos.basket.BasketDTO;
 import dtos.basket.BasketItemDTO;
 import entities.User;
@@ -16,6 +18,7 @@ import entities.payment.PaymentFactory;
 import entities.payment.PaymentMethod;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
 import utils.EMF_Creator;
@@ -37,24 +40,56 @@ public class OrderFacade implements OrderRepository {
         return instance;
     }
 
-    @Override
-    public void createOrder(BasketDTO basketDTO) throws WebApplicationException {
+    private BasketDTO getBasketDTOFromUserName(String userName) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            Basket basket = (Basket) em
+                    .createQuery(
+                            "SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true")
+                    .setParameter("userName", userName)
+                    .getSingleResult();
+
+            return new BasketDTO(basket);
+
+        } catch (Exception e) {
+            throw new WebApplicationException("Basket not found");
+        }
+
+    }
+
+    private void makePaymentForProducts(PaymentFactoryDTO paymentFactoryDTO) {
         PaymentFactory paymentFactory = new PaymentFactory();
 
-        basketDTO.getItems().sort((item1, item2)
+        paymentFactoryDTO.getBasketDTO().getItems().sort((item1, item2)
                 -> item1.getRestaurantName().compareTo(item2.getRestaurantName()));
 
         String oldRestaurant = "";
-        for (BasketItemDTO item : basketDTO.getItems()) {
+        for (BasketItemDTO item : paymentFactoryDTO.getBasketDTO().getItems()) {
             if (!oldRestaurant.equals(item.getRestaurantName())) {
                 oldRestaurant = item.getRestaurantName();
-                
-                PaymentMethod paymentMethod = getPaymentMethod(item.getRestaurantName());
-                Payment payment = paymentFactory.getPayment(basketDTO, paymentMethod);
-                
-                payment.pay();
+
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        PaymentMethod paymentMethod = getPaymentMethod(item.getRestaurantName());
+                        Payment payment = paymentFactory.getPayment(paymentFactoryDTO, paymentMethod);
+                        payment.pay();
+                    }
+                };
+                Thread thread = new Thread(runnable);
+                thread.start();     
             }
         }
+
+    }
+
+    // TODO return order when created.
+    @Override
+    public void createOrder(PaymentDTO paymentDTO) throws WebApplicationException {
+        BasketDTO basketDTO = getBasketDTOFromUserName(paymentDTO.getUserName());
+        PaymentFactoryDTO paymentFactoryDTO = new PaymentFactoryDTO(paymentDTO, basketDTO);
+        makePaymentForProducts(paymentFactoryDTO);
     }
 
     private PaymentMethod getPaymentMethod(String restaurantName) {
@@ -75,21 +110,6 @@ public class OrderFacade implements OrderRepository {
                 throw new WebApplicationException("Restaurant not found");
             }
         }
-    }
-    
-    public static void main(String[] args) {
-        Basket basket = new Basket(new User("Hanse", "4"));
-        basket.addItems(new BasketItem("Sushi Lovers", 10, 2, 10.02));
-        basket.addItems(new BasketItem("Sushi Lovers", 1, 20, 111.0));
-        basket.addItems(new BasketItem("Sushi Lovers", 12, 2, 10.02));
-        
-        basket.addItems(new BasketItem("Banana leaf", 10, 2, 10.02));
-        basket.addItems(new BasketItem("Banana leaf", 10, 2, 10.02));
-        basket.addItems(new BasketItem("Banana leaf", 10, 2, 10.02));
-                
-        BasketDTO basketDTO = new BasketDTO(basket);
-        OrderFacade facade = OrderFacade.getInstance(EMF_Creator.createEntityManagerFactory());
-        facade.createOrder(basketDTO);
     }
 
 }

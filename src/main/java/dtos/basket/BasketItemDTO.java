@@ -17,15 +17,17 @@ public class BasketItemDTO {
     
     private Long id;
     private String restaurantName;
+    private String itemName;
     private int dishNumber;
     private int amount;
     private double price;
 
-    public BasketItemDTO(String restaurantName, int dishNumber, int amount, double price) {
+    public BasketItemDTO(String restaurantName, int dishNumber, String itemName, int amount, double price) {
         this.restaurantName = restaurantName;
         this.dishNumber = dishNumber;
         this.amount = amount;
         this.price = price;
+        this.itemName = itemName;
     }
 
     public BasketItemDTO(BasketItem basketItem) {
@@ -34,6 +36,7 @@ public class BasketItemDTO {
         this.dishNumber = basketItem.getDishNumber();
         this.amount = basketItem.getAmount();
         this.price = basketItem.getPrice();
+        this.itemName = basketItem.getItemName();
     }
     
     public static List<BasketItemDTO> getAllasketItemDtoes(List<BasketItem> bItems) {
@@ -54,11 +57,16 @@ public class BasketItemDTO {
         return dishNumber;
     }
 
-    @Override
-    public String toString() {
-        return "BasketItemDTO{" + "restaurantName=" + restaurantName + ", dishNumber=" + dishNumber + ", amount=" + amount + ", price=" + price + '}';
+    public String getItemName() {
+        return itemName;
     }
 
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+    
+    
+    
     public void setDishNumber(int dishNumber) {
         this.dishNumber = dishNumber;
     }

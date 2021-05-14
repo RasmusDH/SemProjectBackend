@@ -110,9 +110,7 @@ public class BasketFacade implements BasketRepository {
       
     }
     
-    public static void main(String[] args) {
-        
-    }
+  
 
     @Override
     public BasketDTO getBasket(Long id) throws WebApplicationException {

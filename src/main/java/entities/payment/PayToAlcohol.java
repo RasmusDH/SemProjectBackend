@@ -16,29 +16,28 @@ import javax.ws.rs.WebApplicationException;
  *
  * @author peter
  */
-public class PayToSushiLovers implements Payment{
+public class PayToAlcohol implements Payment {
     
-    private PaymentFactoryDTO paymentFactoryDTO;
+   private PaymentFactoryDTO paymentFactoryDTO;
 
-    public PayToSushiLovers(PaymentFactoryDTO paymentFactoryDTO) {
+    public PayToAlcohol(PaymentFactoryDTO paymentFactoryDTO) {
         this.paymentFactoryDTO = paymentFactoryDTO;
     }
     
-    private List<BasketItemDTO> getSushiBasketItems() {
-        List<BasketItemDTO> sushiDishes = new ArrayList<>();
+    private List<BasketItemDTO> getAlcoholBasketItems() {
+        List<BasketItemDTO> alcoholDishes = new ArrayList<>();
         for (BasketItemDTO basketItemDTO : paymentFactoryDTO.getBasketDTO().getItems()) {
-            if (basketItemDTO.getRestaurantName() == "Sushi Lovers") {
-                sushiDishes.add(basketItemDTO);
+            if (basketItemDTO.getRestaurantName() == "Night shop") {
+                alcoholDishes.add(basketItemDTO);
             }
         }
-        return sushiDishes;
+        return alcoholDishes;
     }
-        
+      
     @Override
     public void pay() throws WebApplicationException {
-        
-        List<BasketItemDTO> sushiDishes = getSushiBasketItems();        
-        System.out.println("Now paying to Sushi Lovers");
+        List<BasketItemDTO> alcoholDishes = getAlcoholBasketItems();
+        System.out.println("Pay alcohol");
     }
     
 }
