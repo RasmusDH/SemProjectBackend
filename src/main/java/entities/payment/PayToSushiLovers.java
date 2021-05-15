@@ -5,40 +5,53 @@
  */
 package entities.payment;
 
+import com.google.gson.Gson;
 import dtos.Order.PaymentFactoryDTO;
 import dtos.basket.BasketDTO;
 import dtos.basket.BasketItemDTO;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.WebApplicationException;
 
-/**
- *
- * @author peter
- */
-public class PayToSushiLovers implements Payment{
-    
-    private PaymentFactoryDTO paymentFactoryDTO;
+public class PayToSushiLovers implements Payment {
+
+    private final PaymentFactoryDTO paymentFactoryDTO;
 
     public PayToSushiLovers(PaymentFactoryDTO paymentFactoryDTO) {
         this.paymentFactoryDTO = paymentFactoryDTO;
     }
-    
+
     private List<BasketItemDTO> getSushiBasketItems() {
         List<BasketItemDTO> sushiDishes = new ArrayList<>();
         for (BasketItemDTO basketItemDTO : paymentFactoryDTO.getBasketDTO().getItems()) {
-            if (basketItemDTO.getRestaurantName() == "Sushi Lovers") {
+            if (basketItemDTO.getRestaurantName().equals("Sushi Lovers")) {
                 sushiDishes.add(basketItemDTO);
             }
         }
         return sushiDishes;
     }
-        
+
     @Override
     public void pay() throws WebApplicationException {
-        
-        List<BasketItemDTO> sushiDishes = getSushiBasketItems();        
-        System.out.println("Now paying to Sushi Lovers");
+        try {
+            List<BasketItemDTO> sushiDishes = getSushiBasketItems();
+            HttpURLConnection connection = getUrlConnection("https://api.tobias-z.com/sushi/api/order");
+            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+            writer.write(new Gson().toJson(sushiDishes));
+            writer.flush();
+            int responseCode = connection.getResponseCode();
+            if (responseCode != 200) {
+                throw new WebApplicationException(
+                    "Could not pay for sushi at Sushi Lovers. Response code: " + responseCode, responseCode
+                );
+            }
+            System.out.println("Response from sushi lovers: " + responseCode);
+        } catch (IOException e) {
+            throw new WebApplicationException("Could not pay for sushi at Sushi Lovers", 500);
+        }
     }
-    
+
 }
