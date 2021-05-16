@@ -5,6 +5,7 @@
  */
 package facades;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 import dtos.Order.OrderDTO;
 import dtos.Order.PaymentDTO;
 import dtos.Order.PaymentFactoryDTO;
@@ -42,7 +43,7 @@ public class OrderFacade implements OrderRepository {
         return instance;
     }
 
-    private BasketDTO getBasketDTOFromUserName(String userName) {
+    public BasketDTO getBasketDTOFromUserName(String userName) {
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -112,6 +113,36 @@ public class OrderFacade implements OrderRepository {
         } finally {
             em.close();
         }
+    }
+
+    @Override
+    public List<BasketItemDTO> getAllOrders(String userName) throws WebApplicationException {
+
+        EntityManager em = emf.createEntityManager();
+
+        List<Basket> orders;
+        List<BasketItemDTO> orderDTOs = new ArrayList<>();
+       
+        try {
+            orders = (List<Basket>) em.createQuery(
+                    "SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true"
+            )                    
+                    .setParameter("userName", userName)
+                    .getResultList();
+
+            for (Basket order : orders) {
+                List<BasketItem> basketItems = order.getItems();
+                
+                for (BasketItem basketItem : basketItems) {
+                    orderDTOs.add(new BasketItemDTO(basketItem));
+                }
+            
+            }
+
+        } catch (Exception e) {
+            throw new WebApplicationException("No orders available");
+        }
+        return orderDTOs;
     }
 
     private PaymentMethod getPaymentMethod(String restaurantName) {

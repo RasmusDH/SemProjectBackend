@@ -8,6 +8,10 @@ package entities.order;
 import dtos.Order.OrderDTO;
 import dtos.Order.PaymentDTO;
 import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
+import entities.User;
+import entities.basket.BasketItem;
+import java.util.List;
 import javax.ws.rs.WebApplicationException;
 
 /**
@@ -17,5 +21,6 @@ import javax.ws.rs.WebApplicationException;
 public interface OrderRepository {
     
     public OrderDTO createOrder(PaymentDTO paymentDTO) throws WebApplicationException;
+    public List<BasketItemDTO> getAllOrders(String userName) throws WebApplicationException;
     
 }
