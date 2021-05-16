@@ -105,9 +105,8 @@ public class OrderFacadeTest {
     public void testgetAllOrders() {
        
         String userName = user.getUserName();
-        List<BasketItemDTO> orders = REPO.getAllOrders(userName);
+        List<OrderDTO> orders = REPO.getAllOrders(userName);
         System.out.println("Orders: " + orders);
-        //assertEquals("Night shop", orders.get(0).getRestaurantName());
     }
 
 }

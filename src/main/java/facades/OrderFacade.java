@@ -116,33 +116,24 @@ public class OrderFacade implements OrderRepository {
     }
 
     @Override
-    public List<BasketItemDTO> getAllOrders(String userName) throws WebApplicationException {
+    public List<OrderDTO> getAllOrders(String userName) throws WebApplicationException {
 
         EntityManager em = emf.createEntityManager();
 
-        List<Basket> orders;
-        List<BasketItemDTO> orderDTOs = new ArrayList<>();
+        List<OrderEntity> orders;
        
         try {
-            orders = (List<Basket>) em.createQuery(
-                    "SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true"
+            orders = em.createQuery(
+                    "SELECT o FROM OrderEntity o JOIN o.basket b WHERE b.user.userName = :userName", OrderEntity.class
             )                    
                     .setParameter("userName", userName)
                     .getResultList();
-
-            for (Basket order : orders) {
-                List<BasketItem> basketItems = order.getItems();
-                
-                for (BasketItem basketItem : basketItems) {
-                    orderDTOs.add(new BasketItemDTO(basketItem));
-                }
             
-            }
-
         } catch (Exception e) {
             throw new WebApplicationException("No orders available");
         }
-        return orderDTOs;
+        
+        return OrderDTO.getAllOrderDtoes(orders);
     }
 
     private PaymentMethod getPaymentMethod(String restaurantName) {

@@ -56,7 +56,7 @@ public class OrderResource extends Provider {
     @RolesAllowed("user")
     public Response getAllOrders() {
         String userName = securityContext.getUserPrincipal().getName();
-        List<BasketItemDTO> orderDTO = REPO.getAllOrders(userName);
+        List<OrderDTO> orderDTO = REPO.getAllOrders(userName);
         return Response.ok(GSON.toJson(orderDTO)).build(); // 
     }
 
