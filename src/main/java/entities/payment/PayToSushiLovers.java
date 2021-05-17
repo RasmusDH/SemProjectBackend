@@ -24,20 +24,10 @@ public class PayToSushiLovers implements Payment {
         this.paymentFactoryDTO = paymentFactoryDTO;
     }
 
-    private List<BasketItemDTO> getSushiBasketItems() {
-        List<BasketItemDTO> sushiDishes = new ArrayList<>();
-        for (BasketItemDTO basketItemDTO : paymentFactoryDTO.getBasketDTO().getItems()) {
-            if (basketItemDTO.getRestaurantName().equals("Sushi Lovers")) {
-                sushiDishes.add(basketItemDTO);
-            }
-        }
-        return sushiDishes;
-    }
-
     @Override
     public void pay() throws WebApplicationException {
         try {
-            List<BasketItemDTO> sushiDishes = getSushiBasketItems();
+            List<BasketItemDTO> sushiDishes = getSpecifiedBasketItemsByRestaurant("Sushi Lovers", paymentFactoryDTO);
             HttpURLConnection connection = getUrlConnection("https://api.tobias-z.com/sushi/api/order");
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             writer.write(new Gson().toJson(sushiDishes));
