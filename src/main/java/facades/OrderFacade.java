@@ -87,11 +87,47 @@ public class OrderFacade implements OrderRepository {
 
     }
 
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
+    private void giveBonusPointsToUser(BasketDTO basketDTO, String userName) {
+        double pointsPercent = 0.05;
+        double totalPrice = 0.0;
+        for (BasketItemDTO basketItem : basketDTO.getItems()) {
+            totalPrice = totalPrice + (basketItem.getAmount() * basketItem.getPrice());
+        }
+        double bonusPoints = (totalPrice * pointsPercent);
+
+        EntityManager em = emf.createEntityManager();
+        try {
+            User user = em.find(User.class, userName);
+            double currentPoints = user.getBonusPoints();
+            em.getTransaction().begin();
+            user.setBonusPoints(round(currentPoints + bonusPoints, 2));
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+            throw new WebApplicationException("Bonuspoint calculation mistake");
+
+        } finally {
+            em.close();
+        }
+
+    }
+
     @Override
     public OrderDTO createOrder(PaymentDTO paymentDTO) throws WebApplicationException {
         BasketDTO basketDTO = getBasketDTOFromUserName(paymentDTO.getUserName());
         PaymentFactoryDTO paymentFactoryDTO = new PaymentFactoryDTO(paymentDTO, basketDTO);
         makePaymentForProducts(paymentFactoryDTO);
+        giveBonusPointsToUser(basketDTO, paymentDTO.getUserName());
 
         EntityManager em = emf.createEntityManager();
 
@@ -121,18 +157,18 @@ public class OrderFacade implements OrderRepository {
         EntityManager em = emf.createEntityManager();
 
         List<OrderEntity> orders;
-       
+
         try {
             orders = em.createQuery(
                     "SELECT o FROM OrderEntity o JOIN o.basket b WHERE b.user.userName = :userName", OrderEntity.class
-            )                    
+            )
                     .setParameter("userName", userName)
                     .getResultList();
-            
+
         } catch (Exception e) {
             throw new WebApplicationException("No orders available");
         }
-        
+
         return OrderDTO.getAllOrderDtoes(orders);
     }
 
