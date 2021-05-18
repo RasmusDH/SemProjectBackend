@@ -115,4 +115,11 @@ public class BasketItem implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "BasketItem{" + "id=" + id + ", restaurantName=" + restaurantName + ", itemName=" + itemName + ", dishNumber=" + dishNumber + ", amount=" + amount + ", price=" + price + ", basket=" + basket + '}';
+    }
+    
+    
+
 }

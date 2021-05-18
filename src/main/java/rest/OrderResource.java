@@ -7,8 +7,13 @@ package rest;
 
 import dtos.Order.OrderDTO;
 import dtos.Order.PaymentDTO;
+import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
+import entities.User;
+import entities.basket.BasketItem;
 import entities.order.OrderRepository;
 import facades.OrderFacade;
+import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -28,14 +33,13 @@ import rest.provider.Provider;
  * @author peter
  */
 @Path("order")
-public class OrderResource extends Provider{
-    
+public class OrderResource extends Provider {
+
     private static final OrderRepository REPO = OrderFacade.getInstance(EMF);
 
-    
     @Context
     SecurityContext securityContext;
-    
+
     @Context
     private UriInfo context;
 
@@ -44,12 +48,17 @@ public class OrderResource extends Provider{
 
     @Override
     public Response getById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        OrderDTO orderDTO = REPO.getOrderById((long) id);
+        return Response.ok(orderDTO).build();
     }
 
-    @Override
-    public Response getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @GET
+    @Path("orders")  
+    @RolesAllowed("user")
+    public Response getAllOrders() {
+        String userName = securityContext.getUserPrincipal().getName();
+        List<OrderDTO> orderDTO = REPO.getAllOrders(userName);
+        return Response.ok(GSON.toJson(orderDTO)).build(); // 
     }
 
     @Override
@@ -59,7 +68,7 @@ public class OrderResource extends Provider{
         PaymentDTO paymentDTO = GSON.fromJson(jsonBody, PaymentDTO.class);
         paymentDTO.setUserName(userName);
         OrderDTO orderDTO = REPO.createOrder(paymentDTO);
-        return Response.ok(GSON.toJson(orderDTO)).build(); 
+        return Response.ok(GSON.toJson(orderDTO)).build();
     }
 
     @Override
@@ -71,7 +80,12 @@ public class OrderResource extends Provider{
     public Response delete(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 
+    @Override
+    public Response getAll() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
 }

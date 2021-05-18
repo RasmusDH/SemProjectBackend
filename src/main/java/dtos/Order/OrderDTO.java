@@ -7,6 +7,8 @@ package dtos.Order;
 
 import dtos.basket.BasketDTO;
 import entities.order.OrderEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -42,6 +44,12 @@ public class OrderDTO {
         this.delivery = order.getDelivery();
         this.basketDTO = new BasketDTO(order.getBasket());
         
+    }
+    
+    public static List<OrderDTO> getAllOrderDtoes(List<OrderEntity> orders) {
+        List<OrderDTO> ordersDTO = new ArrayList<>();
+        orders.forEach(item -> ordersDTO.add(new OrderDTO(item)));
+        return ordersDTO;
     }
 
     public Long getId() {
