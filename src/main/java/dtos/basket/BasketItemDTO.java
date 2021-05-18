@@ -96,8 +96,12 @@ public class BasketItemDTO {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "BasketItemDTO{" + "id=" + id + ", restaurantName=" + restaurantName + ", itemName=" + itemName + ", dishNumber=" + dishNumber + ", amount=" + amount + ", price=" + price + '}';
+    }
     
     
-    
-    
+  
 }
