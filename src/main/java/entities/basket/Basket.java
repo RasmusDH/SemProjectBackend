@@ -116,6 +116,12 @@ public class Basket implements Serializable {
     public void setOrder(OrderEntity order) {
         this.order = order;
     }
+
+    @Override
+    public String toString() {
+        return "Basket{" + "id=" + id + ", active=" + active + ", user=" + user + ", items=" + items + ", order=" + order + '}';
+    }
+    
     
     
 

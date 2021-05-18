@@ -7,12 +7,16 @@ package facades;
 
 import dtos.Order.ContactInformationDTO;
 import dtos.Order.CreditCardDTO;
+import dtos.Order.OrderDTO;
 import dtos.Order.PaymentDTO;
+import dtos.basket.BasketDTO;
+import dtos.basket.BasketItemDTO;
 import entities.Role;
 import entities.User;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
 import entities.order.OrderRepository;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -65,6 +69,8 @@ public class OrderFacadeTest {
             b1.addItems(new BasketItem("Night shop",  2, "Beer", 44, 3.06));
             b1.addItems(new BasketItem("Pizza 2610", 5, "Margaritha", 11, 5.56));
             b1.addItems(new BasketItem("Sushi Lovers", 2, "Maki2", 24, 9.99));
+            
+            
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -84,6 +90,23 @@ public class OrderFacadeTest {
 
         assertDoesNotThrow(() -> REPO.createOrder(paymentDTO));
 
+    }
+    
+    @Test
+    public void testGetBasketDTOFromUserName() {
+        OrderFacade orderFacade = new OrderFacade();
+        String x = "basketUser";
+        BasketDTO basketDTO = orderFacade.getBasketDTOFromUserName(x);
+        // System.out.println(basketDTO.getItems());
+        
+    }
+    
+    @Test
+    public void testgetAllOrders() {
+       
+        String userName = user.getUserName();
+        List<OrderDTO> orders = REPO.getAllOrders(userName);
+        System.out.println("Orders: " + orders);
     }
 
 }
