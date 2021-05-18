@@ -156,4 +156,17 @@ public class OrderFacade implements OrderRepository {
         }
     }
 
+    @Override
+    public OrderDTO getOrderById(Long id) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            OrderEntity orderEntity = em.find(OrderEntity.class, id);
+            if (orderEntity == null) {
+                throw new WebApplicationException("Could not find an order with id: " + id, 404);
+            }
+            return new OrderDTO(orderEntity);
+        } finally {
+            em.close();
+        }
+    }
 }

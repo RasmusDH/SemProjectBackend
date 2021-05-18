@@ -15,14 +15,18 @@ import entities.Role;
 import entities.User;
 import entities.basket.Basket;
 import entities.basket.BasketItem;
+import entities.order.OrderEntity;
 import entities.order.OrderRepository;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import utils.EMF_Creator;
@@ -69,8 +73,7 @@ public class OrderFacadeTest {
             b1.addItems(new BasketItem("Night shop",  2, "Beer", 44, 3.06));
             b1.addItems(new BasketItem("Pizza 2610", 5, "Margaritha", 11, 5.56));
             b1.addItems(new BasketItem("Sushi Lovers", 2, "Maki2", 24, 9.99));
-            
-            
+          
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -107,6 +110,68 @@ public class OrderFacadeTest {
         String userName = user.getUserName();
         List<OrderDTO> orders = REPO.getAllOrders(userName);
         System.out.println("Orders: " + orders);
+    }
+
+    @Nested
+    @DisplayName("get order by id")
+    class GetOrderById {
+
+        private OrderEntity order;
+
+        @BeforeEach
+        void setUp() {
+            EntityManager em = emf.createEntityManager();
+            try {
+                em.getTransaction().begin();
+                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", b1);
+                em.persist(order);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            EntityManager em = emf.createEntityManager();
+            try {
+                em.getTransaction().begin();
+                em.createQuery("DELETE FROM OrderEntity").executeUpdate();
+                em.createQuery("DELETE FROM BasketItem").executeUpdate();
+                em.createQuery("DELETE FROM Basket").executeUpdate();
+                em.createQuery("DELETE FROM Role").executeUpdate();
+                em.createNamedQuery("User.deleteAllRows").executeUpdate();
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+
+        @Test
+        @DisplayName("should return an orderDTO")
+        void shouldReturnAnOrderDto() {
+            OrderDTO orderDTO = REPO.getOrderById(order.getId());
+            assertNotNull(orderDTO);
+        }
+
+        @Test
+        @DisplayName("should throw error if given incorrect id")
+        void shouldThrowErrorIfGivenIncorrectId() {
+            assertThrows(WebApplicationException.class, () -> REPO.getOrderById(1000000L));
+        }
+
+        @Test
+        @DisplayName("should have order details on it")
+        void shouldHaveOrderDetailsOnIt() {
+            OrderDTO orderDTO = REPO.getOrderById(order.getId());
+            assertEquals(order.getId(), orderDTO.getId());
+            assertEquals(order.getAddress(), orderDTO.getAddress());
+            assertEquals(order.getDelivery(), orderDTO.getDelivery());
+            assertEquals(order.getEmail(), orderDTO.getEmail());
+            assertEquals(order.getName(), orderDTO.getName());
+            assertEquals(order.getPhone(), orderDTO.getPhone());
+        }
+
     }
 
 }

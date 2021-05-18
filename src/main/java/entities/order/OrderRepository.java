@@ -21,6 +21,9 @@ import javax.ws.rs.WebApplicationException;
 public interface OrderRepository {
     
     public OrderDTO createOrder(PaymentDTO paymentDTO) throws WebApplicationException;
+
+    OrderDTO getOrderById(Long id) throws WebApplicationException;
+  
     public List<OrderDTO> getAllOrders(String userName) throws WebApplicationException;
     
 }
