@@ -17,12 +17,13 @@ import entities.basket.Basket;
 import entities.basket.BasketItem;
 import entities.order.OrderEntity;
 import entities.order.OrderRepository;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -91,7 +92,13 @@ public class OrderFacadeTest {
         CreditCardDTO creditCardDTO = new CreditCardDTO("11111", "34567", "Hanse", "1234");
         PaymentDTO paymentDTO = new PaymentDTO(user.getUserName(), contactInformationDTO, creditCardDTO);
 
-        assertDoesNotThrow(() -> REPO.createOrder(paymentDTO));
+        CountDownLatch lock = new CountDownLatch(1);
+
+        assertDoesNotThrow(() -> {
+            REPO.createOrder(paymentDTO);
+            lock.await(5000, TimeUnit.MILLISECONDS);
+            lock.countDown();
+        });
 
     }
     
