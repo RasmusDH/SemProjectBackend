@@ -43,7 +43,7 @@ public class OrderFacade implements OrderRepository {
         return instance;
     }
 
-    public BasketDTO getBasketDTOFromUserName(String userName) {
+    private BasketDTO getBasketDTOFromUserName(String userName) {
         EntityManager em = emf.createEntityManager();
 
         try {
