@@ -70,11 +70,11 @@ public class OrderFacadeTest {
             em.persist(b1);
 
             b1.addItems(new BasketItem("Sushi Lovers", 2, "Maki", 24, 9.99));
-            b1.addItems(new BasketItem("Banana leaf",  1, "Curry", 43, 2.01));
-            b1.addItems(new BasketItem("Night shop",  2, "Beer", 44, 3.06));
+            b1.addItems(new BasketItem("Banana leaf", 1, "Curry", 43, 2.01));
+            b1.addItems(new BasketItem("Night shop", 2, "Beer", 44, 3.06));
             b1.addItems(new BasketItem("Pizza 2610", 5, "Margaritha", 11, 5.56));
             b1.addItems(new BasketItem("Sushi Lovers", 2, "Maki2", 24, 9.99));
-          
+
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -88,6 +88,7 @@ public class OrderFacadeTest {
 
     @Test
     public void testCreateOrder() {
+
         ContactInformationDTO contactInformationDTO = new ContactInformationDTO("Hans", "e.mand", "1234", "hansegande", "24.03.02");
         CreditCardDTO creditCardDTO = new CreditCardDTO("11111", "34567", "Hanse", "1234");
         PaymentDTO paymentDTO = new PaymentDTO(user.getUserName(), contactInformationDTO, creditCardDTO);
@@ -95,28 +96,56 @@ public class OrderFacadeTest {
         CountDownLatch lock = new CountDownLatch(1);
 
         assertDoesNotThrow(() -> {
+
             REPO.createOrder(paymentDTO);
             lock.await(5000, TimeUnit.MILLISECONDS);
             lock.countDown();
         });
 
     }
-    
-    @Test
-    public void testGetBasketDTOFromUserName() {
-        OrderFacade orderFacade = new OrderFacade();
-        String x = "basketUser";
-        BasketDTO basketDTO = orderFacade.getBasketDTOFromUserName(x);
-        // System.out.println(basketDTO.getItems());
-        
-    }
-    
-    @Test
-    public void testgetAllOrders() {
-       
-        String userName = user.getUserName();
-        List<OrderDTO> orders = REPO.getAllOrders(userName);
-        System.out.println("Orders: " + orders);
+
+    @Nested
+    @DisplayName("get all orders by user")
+    class GetAllOrders {
+
+        private OrderEntity order;
+
+        @BeforeEach
+        void setUp() {
+            EntityManager em = emf.createEntityManager();
+            try {
+                em.getTransaction().begin();
+                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", b1);
+                em.persist(order);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            EntityManager em = emf.createEntityManager();
+            try {
+                em.getTransaction().begin();
+                em.createQuery("DELETE FROM OrderEntity").executeUpdate();
+                em.createQuery("DELETE FROM BasketItem").executeUpdate();
+                em.createQuery("DELETE FROM Basket").executeUpdate();
+                em.createQuery("DELETE FROM Role").executeUpdate();
+                em.createNamedQuery("User.deleteAllRows").executeUpdate();
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+
+        @Test
+        public void testgetAllOrders() {
+            String userName = user.getUserName();
+            List<OrderDTO> orders = REPO.getAllOrders(userName);
+            assertEquals(1, orders.size());
+
+        }
     }
 
     @Nested

@@ -19,21 +19,21 @@ public class UserDTO {
     private String userName;
     private String password;
     private List<RoleDTO> roles = new ArrayList<>();
+    private double bonusPoints;
 
     public UserDTO() {
     }
 
     public UserDTO(String userName, String password) {
-
         this.userName = userName;
         this.password = password;
-
     }
 
     public UserDTO(User user) {
         this.userName = user.getUserName();
         this.password = user.getUserPass();
         this.roles = RoleDTO.getAllRoleDtoes(user.getRoleList());
+        this.bonusPoints = user.getBonusPoints();
     }
 
     public List<String> getRolesAsStrings() {
@@ -71,6 +71,14 @@ public class UserDTO {
         this.roles = roles;
     }
 
+    public double getBonusPoints() {
+        return bonusPoints;
+    }
+
+    public void setBonusPoints(double bonusPoints) {
+        this.bonusPoints = bonusPoints;
+    }   
+    
     @Override
     public int hashCode() {
         int hash = 7;

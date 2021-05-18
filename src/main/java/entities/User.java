@@ -43,6 +43,8 @@ public class User implements Serializable {
         cascade = CascadeType.PERSIST
     )
   private List<Role> roleList = new ArrayList<>();
+  
+  private double bonusPoints;
 
    
    @OneToMany(
@@ -80,10 +82,9 @@ public class User implements Serializable {
 
   public User(String userName, String userPass) {
     this.userName = userName;
-
     this.hashPassword = BCrypt.hashpw(userPass, BCrypt.gensalt());
   }
-
+  
 
   public String getUserName() {
     return userName;
@@ -113,4 +114,12 @@ public class User implements Serializable {
     roleList.add(userRole);
   }
 
-}
+    public double getBonusPoints() {
+        return bonusPoints;
+    }
+
+    public void setBonusPoints(double bonusPoints) {
+        this.bonusPoints = bonusPoints;
+    }
+  
+  }

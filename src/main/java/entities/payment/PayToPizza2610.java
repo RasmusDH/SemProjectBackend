@@ -5,9 +5,13 @@
  */
 package entities.payment;
 
+import com.google.gson.Gson;
 import dtos.Order.PaymentFactoryDTO;
 import dtos.basket.BasketDTO;
 import dtos.basket.BasketItemDTO;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.WebApplicationException;
@@ -24,21 +28,24 @@ public class PayToPizza2610 implements Payment {
         this.paymentFactoryDTO = paymentFactoryDTO;
     }
 
-    private List<BasketItemDTO> getPizza2610BasketItemsDTO() {
-        List<BasketItemDTO> pizzaDishes = new ArrayList<>();
-        for (BasketItemDTO basketItemDTO : paymentFactoryDTO.getBasketDTO().getItems()) {
-            if (basketItemDTO.getRestaurantName() == "Pizza 2610") {
-                pizzaDishes.add(basketItemDTO);
-            }
-        }
-        return pizzaDishes;
-
-    }
-
     @Override
     public void pay() throws WebApplicationException {
-        List<BasketItemDTO> pizzaDishes = getPizza2610BasketItemsDTO();
-        System.out.println("Pizza pay");
+        try {
+            List<BasketItemDTO> pizzaDishes = getSpecifiedBasketItemsByRestaurant("Pizza 2610", paymentFactoryDTO);
+            HttpURLConnection connection = getUrlConnection("https://osvaldo.dk/tomcat/Pizza2610/api/pay/");
+            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+            writer.write(new Gson().toJson(pizzaDishes));
+            writer.flush();
+            int responseCode = connection.getResponseCode();
+            if (responseCode != 200) {
+                throw new WebApplicationException(
+                    "Could not pay for the order at Pizza 2610. Response code: " + responseCode, responseCode
+                );
+            }
+            System.out.println("Response from Pizza 2610: " + responseCode);
+        } catch (IOException e) {
+            throw new WebApplicationException("Could not pay for the order at Pizza 2610", 500);
+        }
     }
 
 }
