@@ -36,6 +36,7 @@ public class Basket implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private boolean active;
+    private double totalPrice;
     
     @ManyToOne
     private User user;
@@ -55,6 +56,7 @@ public class Basket implements Serializable {
         this.items = new ArrayList<>();
         this.active = true;
         this.user = user;
+        this.totalPrice = totalPrice;
     }
     
     public Basket() {
@@ -71,7 +73,8 @@ public class Basket implements Serializable {
     public Basket(BasketDTO basketDTO) {
         this.items = getAllasketItem(basketDTO.getItems());
         this.active = true;
-        this.id = basketDTO.getId();        
+        this.id = basketDTO.getId();    
+        this.totalPrice = totalPrice;
     }
 
     public void addItems(BasketItem basketItem) {
@@ -116,6 +119,16 @@ public class Basket implements Serializable {
     public void setOrder(OrderEntity order) {
         this.order = order;
     }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+    
+    
 
     @Override
     public String toString() {

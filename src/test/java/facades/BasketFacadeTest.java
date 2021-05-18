@@ -12,6 +12,8 @@ import entities.Role;
 import entities.User;
 import entities.basket.BasketItem;
 import entities.basket.EditBasketType;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
@@ -84,16 +86,12 @@ public class BasketFacadeTest {
 
         @Test
         public void testCreate() {
-
-            System.out.println("create");
             BasketDTO result = facade.create();
             assertNotNull(result);
-
         }
 
         @Test
         public void testAddToBasket() {
-            System.out.println("addToBasket");
             BasketItemDTO basketItemDTO = new BasketItemDTO("PIZZA2610", 1, "Margaritha", 2, 3);
             BasketDTO bDto = facade.addToBasket("basketUser", basketItemDTO);
             assertEquals(2, bDto.getItems().size());
@@ -102,9 +100,6 @@ public class BasketFacadeTest {
 
         @Test
         public void testGetBasket() {
-
-            System.out.println("getBasket");
-
             BasketDTO bDto = facade.getBasket(b1.getId());
             assertEquals(b1.getId(), bDto.getId());
 
@@ -113,7 +108,6 @@ public class BasketFacadeTest {
             assertThrows(WebApplicationException.class, () -> {
                 facade.getBasket(0L);
             });
-
         }
 
         @Test
@@ -121,6 +115,18 @@ public class BasketFacadeTest {
         void getUsersActiveBasketWillReturnABasketIfUserHasABasket() {
             BasketDTO basketDTO = facade.getUsersActiveBasket(user.getUserName());
             assertNotNull(basketDTO.getId());
+        }
+        
+        @Test
+        public void testGetTotalPrice() {
+            BasketFacade facade = new BasketFacade();
+            List<BasketItemDTO> list = new ArrayList<>();
+            BasketItemDTO one = new BasketItemDTO("PIZZA2610", 1, "Margaritha", 2, 3);
+            BasketItemDTO two = new BasketItemDTO("PIZZA2610", 2, "Margaritha", 4, 7);
+            list.add(one);
+            list.add(two);
+                        
+            
         }
 
         @Nested

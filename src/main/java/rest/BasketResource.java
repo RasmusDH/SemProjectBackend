@@ -74,8 +74,6 @@ public class BasketResource extends Provider {
         BasketItemDTO basketItemDTO = GSON.fromJson(jsonBody, BasketItemDTO.class);
         BasketDTO basketDTO = REPO.addToBasket(userName, basketItemDTO);
 
-        System.out.println(basketDTO);
-
         return Response.ok(basketDTO).build();
 
     }

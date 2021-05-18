@@ -32,6 +32,7 @@ public class OrderEntity implements Serializable {
     private String phone;
     private String address;
     private String delivery;
+    
 
     @OneToOne
     private Basket basket;
