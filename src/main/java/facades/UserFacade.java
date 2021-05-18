@@ -87,5 +87,20 @@ public class UserFacade implements UserRepository {
         }
         return user;
     }
+    
+    public double getBonusPoints(String userName) {
+        EntityManager em = emf.createEntityManager();
+        User user;
+        try {
+            user = em.find(User.class, userName);
+            if (user == null) {
+                throw new WebApplicationException("Unable to find user");
+            }
+        } finally {
+            em.close();
+        }
+        return user.getBonusPoints();
+        
+    }
 
 }

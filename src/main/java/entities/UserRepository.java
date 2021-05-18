@@ -15,5 +15,8 @@ import javax.ws.rs.WebApplicationException;
 public interface UserRepository {
     
     public UserDTO create(UserDTO userDTO) throws WebApplicationException;
+    public double getBonusPoints(String userName) throws WebApplicationException;
+
+    
     
 }

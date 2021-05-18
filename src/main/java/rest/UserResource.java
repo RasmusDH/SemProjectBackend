@@ -10,9 +10,12 @@ import com.google.gson.GsonBuilder;
 import dtos.user.UserDTO;
 import entities.UserRepository;
 import facades.UserFacade;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.GET;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import rest.provider.Provider;
 
@@ -36,6 +39,14 @@ public class UserResource extends Provider {
     public UserResource() {
     }
 
+    
+    @GET
+    @Path("bonuspoints/{userName}")
+    public Response getBonusPoints(@PathParam("userName") String userName){
+        double points = REPO.getBonusPoints(userName);
+        String msg = "{\"bonusPoints\": " + points + "}";
+        return Response.ok(msg).build();
+    }
    
     @Override
     public Response getById(int id) {
