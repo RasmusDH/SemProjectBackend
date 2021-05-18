@@ -5,9 +5,13 @@
  */
 package entities.payment;
 
+import com.google.gson.Gson;
 import dtos.Order.PaymentFactoryDTO;
 import dtos.basket.BasketDTO;
 import dtos.basket.BasketItemDTO;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.WebApplicationException;
@@ -24,20 +28,25 @@ public class PayToAlcohol implements Payment {
         this.paymentFactoryDTO = paymentFactoryDTO;
     }
     
-    private List<BasketItemDTO> getAlcoholBasketItems() {
-        List<BasketItemDTO> alcoholDishes = new ArrayList<>();
-        for (BasketItemDTO basketItemDTO : paymentFactoryDTO.getBasketDTO().getItems()) {
-            if (basketItemDTO.getRestaurantName() == "Night shop") {
-                alcoholDishes.add(basketItemDTO);
-            }
-        }
-        return alcoholDishes;
-    }
-      
+         
     @Override
     public void pay() throws WebApplicationException {
-        List<BasketItemDTO> alcoholDishes = getAlcoholBasketItems();
-        System.out.println("Pay alcohol");
+         try {
+            List<BasketItemDTO> sushiDishes = getSpecifiedBasketItemsByRestaurant("Night shop", paymentFactoryDTO);
+            HttpURLConnection connection = getUrlConnection("https://ditlevsoftware.com/tomcat/alcohol-shop/api/payment/");
+            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+            writer.write(new Gson().toJson(sushiDishes));
+            writer.flush();
+            int responseCode = connection.getResponseCode();
+            if (responseCode != 200) {
+                throw new WebApplicationException(
+                    "Could not pay for the order at Noght SHop. Response code: " + responseCode, responseCode
+                );
+            }
+            System.out.println("Response from Night SHop: " + responseCode);
+        } catch (IOException e) {
+            throw new WebApplicationException("Could not pay for the order at Noght SHop", 500);
+        }
     }
     
 }

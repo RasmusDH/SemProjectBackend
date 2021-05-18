@@ -33,7 +33,7 @@ public class PayToBananaLeaf implements Payment {
         List<BasketItemDTO> bananaLeafDishes = getSpecifiedBasketItemsByRestaurant("Banana leaf", paymentFactoryDTO);
         
         try {
-        HttpURLConnection connection = getUrlConnection("https://peterrambeckandersen.com/api/order");
+        HttpURLConnection connection = getUrlConnection("https://peterrambeckandersen.com/tomcat/Bananaleaf/api/restaurant/order");
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             writer.write(new Gson().toJson(bananaLeafDishes));
             writer.flush();
