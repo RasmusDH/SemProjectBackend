@@ -20,6 +20,7 @@ public class BasketDTO {
     
     private Long id;
     private boolean active;
+    private double totalPrice;
        
     private UserDTO user;
     private List<BasketItemDTO> items;
@@ -34,6 +35,7 @@ public class BasketDTO {
         this.id = basket.getId();
         this.items = BasketItemDTO.getAllasketItemDtoes(basket.getItems());
         this.user = new UserDTO(basket.getUser());
+        this.totalPrice = basket.getTotalPrice();
     }
     
     public static List<BasketDTO> getAllBasketDtoes(List<Basket> bsList) {

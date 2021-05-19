@@ -88,6 +88,7 @@ public class UserFacade implements UserRepository {
         return user;
     }
     
+    @Override
     public double getBonusPoints(String userName) {
         EntityManager em = emf.createEntityManager();
         User user;
@@ -100,7 +101,6 @@ public class UserFacade implements UserRepository {
             em.close();
         }
         return user.getBonusPoints();
-        
     }
 
 }

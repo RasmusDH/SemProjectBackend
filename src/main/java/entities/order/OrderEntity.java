@@ -32,17 +32,20 @@ public class OrderEntity implements Serializable {
     private String phone;
     private String address;
     private String delivery;
+    private double generatedBonusPoints;
+    
 
     @OneToOne
     private Basket basket;
 
-    public OrderEntity(String name, String email, String phone, String address, String delivery, Basket basket) {
+    public OrderEntity(String name, String email, String phone, String address, String delivery, double generatedBonusPoints, Basket basket) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.delivery = delivery;
         this.basket = basket;
+        this.generatedBonusPoints = generatedBonusPoints;
     }
 
     public OrderEntity() {
@@ -103,5 +106,15 @@ public class OrderEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public double getGeneratedBonusPoints() {
+        return generatedBonusPoints;
+    }
+
+    public void setGeneratedBonusPoints(double generatedBonusPoints) {
+        this.generatedBonusPoints = generatedBonusPoints;
+    }
+    
+    
 
 }

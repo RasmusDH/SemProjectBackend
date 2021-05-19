@@ -10,7 +10,6 @@ import com.google.gson.GsonBuilder;
 import dtos.user.UserDTO;
 import entities.UserRepository;
 import facades.UserFacade;
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;

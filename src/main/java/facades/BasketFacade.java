@@ -51,66 +51,70 @@ public class BasketFacade implements BasketRepository {
             em.close();
         }
         return new BasketDTO(
-            basket.getId(),
-            new UserDTO(),
-            BasketItemDTO.getAllasketItemDtoes(basket.getItems())
+                basket.getId(),
+                new UserDTO(),
+                BasketItemDTO.getAllasketItemDtoes(basket.getItems())
         );
     }
 
     @Override
     public BasketDTO addToBasket(String userName, BasketItemDTO basketItemDTO)
-        throws WebApplicationException {
+            throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         BasketItem basketItem = new BasketItem(basketItemDTO);
 
         Basket b;
-        
+
         try {
             em.getTransaction().begin();
 
             try {
                 b = (Basket) em
-                    .createQuery(
-                        "SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true")
-                    .setParameter("userName", userName)
-                    .getSingleResult();
-
-                System.out.println("Basket found: " + b);
+                        .createQuery(
+                                "SELECT b FROM Basket b WHERE b.user.userName = :userName AND b.active = true")
+                        .setParameter("userName", userName)
+                        .getSingleResult();
 
             } catch (Exception e) {
 
                 User u = em.find(User.class, userName);
                 b = new Basket(u);
-                System.out.println(u);
                 em.persist(b);
 
                 System.out.println("Basket not found" + b);
             }
-            
+
+           
             String restaurantName = basketItem.getRestaurantName();
             try {
                 BasketItem oldBasketItem = (BasketItem) em.createQuery(
                         "SELECT b FROM BasketItem b WHERE b.restaurantName = :restaurantName AND b.dishNumber = :dishNumber AND b.basket.active = true")
-                    .setParameter("restaurantName", restaurantName)
-                    .setParameter("dishNumber", basketItem.getDishNumber())
-                    .getSingleResult();
-                
+                        .setParameter("restaurantName", restaurantName)
+                        .setParameter("dishNumber", basketItem.getDishNumber())
+                        .getSingleResult();
+
                 oldBasketItem.setAmount(oldBasketItem.getAmount() + basketItem.getAmount());
 
-            } catch(Exception e) {
+            } catch (Exception e) {
                 b.addItems(basketItem);
-            }            
-             em.getTransaction().commit();
+            }
+            
+             // Total price calc.
+            double totalBasketPrice = 0.0;
+            for (BasketItem basketItemPrice : b.getItems()) {
+                totalBasketPrice += (basketItemPrice.getPrice()*basketItemPrice.getAmount());
+            }
+            b.setTotalPrice(totalBasketPrice);
+            // end
+
+            em.getTransaction().commit();
 
         } finally {
             em.close();
         }
         return new BasketDTO(b);
-        
-      
+
     }
-    
-  
 
     @Override
     public BasketDTO getBasket(Long id) throws WebApplicationException {
@@ -121,13 +125,11 @@ public class BasketFacade implements BasketRepository {
         b = em.find(Basket.class, id);
         if (b == null) {
             throw new WebApplicationException(String.format("Basket with id: (%d) not found", id),
-                400);
+                    400);
         }
         em.close();
 
         return new BasketDTO(b);
-
-
     }
 
     @Override
@@ -135,11 +137,11 @@ public class BasketFacade implements BasketRepository {
         EntityManager em = emf.createEntityManager();
         try {
             Basket basket = em.createQuery(
-                "SELECT b FROM Basket b"
+                    "SELECT b FROM Basket b"
                     + " WHERE b.user.userName = :userName"
                     + " AND b.active = true", Basket.class)
-                .setParameter("userName", userName)
-                .getSingleResult();
+                    .setParameter("userName", userName)
+                    .getSingleResult();
             return new BasketDTO(basket);
         } catch (Exception e) {
             throw new WebApplicationException("User has no basket", 400);
@@ -162,5 +164,4 @@ public class BasketFacade implements BasketRepository {
                 throw new WebApplicationException("Unknown edit command: " + type.name());
         }
     }
-
 }
