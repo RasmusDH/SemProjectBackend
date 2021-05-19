@@ -22,6 +22,7 @@ public class OrderDTO {
     private String phone;
     private String address;
     private String delivery;
+    private double generatedBonusPoints; 
        
     BasketDTO basketDTO;
 
@@ -43,7 +44,7 @@ public class OrderDTO {
         this.address = order.getAddress();
         this.delivery = order.getDelivery();
         this.basketDTO = new BasketDTO(order.getBasket());
-        
+        this.generatedBonusPoints = order.getGeneratedBonusPoints();
     }
     
     public static List<OrderDTO> getAllOrderDtoes(List<OrderEntity> orders) {
@@ -107,8 +108,14 @@ public class OrderDTO {
     public void setBasketDTO(BasketDTO basketDTO) {
         this.basketDTO = basketDTO;
     }
-    
-    
+
+    public double getGeneratedBonusPoints() {
+        return generatedBonusPoints;
+    }
+
+    public void setGeneratedBonusPoints(double generatedBonusPoints) {
+        this.generatedBonusPoints = generatedBonusPoints;
+    }
     
     
     

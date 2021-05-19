@@ -96,8 +96,10 @@ public class OrderFacade implements OrderRepository {
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
+    
+    
 
-    private void giveBonusPointsToUser(BasketDTO basketDTO, String userName) {
+    private double giveBonusPointsToUser(BasketDTO basketDTO, String userName) {
         double pointsPercent = 0.05;
         double totalPrice = 0.0;
         for (BasketItemDTO basketItem : basketDTO.getItems()) {
@@ -119,6 +121,7 @@ public class OrderFacade implements OrderRepository {
         } finally {
             em.close();
         }
+        return bonusPoints;
 
     }
 
@@ -127,7 +130,7 @@ public class OrderFacade implements OrderRepository {
         BasketDTO basketDTO = getBasketDTOFromUserName(paymentDTO.getUserName());
         PaymentFactoryDTO paymentFactoryDTO = new PaymentFactoryDTO(paymentDTO, basketDTO);
         makePaymentForProducts(paymentFactoryDTO);
-        giveBonusPointsToUser(basketDTO, paymentDTO.getUserName());
+        double bonusPoints = giveBonusPointsToUser(basketDTO, paymentDTO.getUserName());
 
         EntityManager em = emf.createEntityManager();
 
@@ -138,6 +141,7 @@ public class OrderFacade implements OrderRepository {
                 paymentDTO.getContactInfo().getPhone(),
                 paymentDTO.getContactInfo().getAddress(),
                 paymentDTO.getContactInfo().getDelivery(),
+                bonusPoints,
                 basket);
 
         try {

@@ -115,7 +115,7 @@ public class OrderFacadeTest {
             EntityManager em = emf.createEntityManager();
             try {
                 em.getTransaction().begin();
-                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", b1);
+                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", 2.0, b1);
                 em.persist(order);
                 em.getTransaction().commit();
             } finally {
@@ -159,7 +159,7 @@ public class OrderFacadeTest {
             EntityManager em = emf.createEntityManager();
             try {
                 em.getTransaction().begin();
-                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", b1);
+                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", 2.0, b1);
                 em.persist(order);
                 em.getTransaction().commit();
             } finally {
@@ -206,6 +206,7 @@ public class OrderFacadeTest {
             assertEquals(order.getEmail(), orderDTO.getEmail());
             assertEquals(order.getName(), orderDTO.getName());
             assertEquals(order.getPhone(), orderDTO.getPhone());
+            assertEquals(order.getGeneratedBonusPoints(), orderDTO.getGeneratedBonusPoints());
         }
 
     }

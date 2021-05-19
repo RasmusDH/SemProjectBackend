@@ -140,7 +140,7 @@ class OrderResourceTest extends SetupRestTests {
             EntityManager em = emf.createEntityManager();
             try {
                 em.getTransaction().begin();
-                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", b1);
+                order = new OrderEntity("Bob", "bob@thebuilder.com", "213122", "Bob road", "21.05", 2.0, b1);
                 em.persist(order);
                 em.getTransaction().commit();
             } finally {
