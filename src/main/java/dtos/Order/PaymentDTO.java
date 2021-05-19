@@ -14,11 +14,13 @@ public class PaymentDTO {
     private String userName;
     private ContactInformationDTO contactInfo;
     private CreditCardDTO creditCardInfo;
+    private boolean isUsingBonusPoints;
 
-    public PaymentDTO(String userName, ContactInformationDTO contactInfo, CreditCardDTO creditCardInfo) {
+    public PaymentDTO(String userName, ContactInformationDTO contactInfo, CreditCardDTO creditCardInfo, boolean isUsingBonusPoints) {
         this.userName = userName;
         this.contactInfo = contactInfo;
         this.creditCardInfo = creditCardInfo;
+        this.isUsingBonusPoints = isUsingBonusPoints;
     }
 
     public String getUserName() {
@@ -43,6 +45,14 @@ public class PaymentDTO {
 
     public void setCreditCardInfo(CreditCardDTO creditCardInfo) {
         this.creditCardInfo = creditCardInfo;
+    }
+
+    public boolean isIsUsingBonusPoints() {
+        return isUsingBonusPoints;
+    }
+
+    public void setIsUsingBonusPoints(boolean isUsingBonusPoints) {
+        this.isUsingBonusPoints = isUsingBonusPoints;
     }
     
     

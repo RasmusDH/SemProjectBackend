@@ -91,7 +91,7 @@ public class OrderFacadeTest {
 
         ContactInformationDTO contactInformationDTO = new ContactInformationDTO("Hans", "e.mand", "1234", "hansegande", "24.03.02");
         CreditCardDTO creditCardDTO = new CreditCardDTO("11111", "34567", "Hanse", "1234");
-        PaymentDTO paymentDTO = new PaymentDTO(user.getUserName(), contactInformationDTO, creditCardDTO);
+        PaymentDTO paymentDTO = new PaymentDTO(user.getUserName(), contactInformationDTO, creditCardDTO, false);
 
         CountDownLatch lock = new CountDownLatch(1);
 

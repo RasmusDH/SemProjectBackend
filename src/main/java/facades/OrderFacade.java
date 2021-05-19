@@ -61,6 +61,15 @@ public class OrderFacade implements OrderRepository {
 
     }
 
+    private double calculateRemaingBonusPoints(double existingBonusPoints, double totalPrice) {
+        double restBonusPoints = existingBonusPoints - totalPrice;
+
+        if (restBonusPoints < 0) {
+            restBonusPoints = 0;
+        }
+        return restBonusPoints;
+    }
+
     private void makePaymentForProducts(PaymentFactoryDTO paymentFactoryDTO) {
         PaymentFactory paymentFactory = new PaymentFactory();
 
@@ -96,10 +105,8 @@ public class OrderFacade implements OrderRepository {
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
-    
-    
 
-    private double giveBonusPointsToUser(BasketDTO basketDTO, String userName) {
+    private double giveBonusPointsToUser(BasketDTO basketDTO, String userName, boolean isUsingBonusPoints) {
         double pointsPercent = 0.05;
         double totalPrice = 0.0;
         for (BasketItemDTO basketItem : basketDTO.getItems()) {
@@ -112,6 +119,10 @@ public class OrderFacade implements OrderRepository {
             User user = em.find(User.class, userName);
             double currentPoints = user.getBonusPoints();
             em.getTransaction().begin();
+
+            if (isUsingBonusPoints) {
+                currentPoints = calculateRemaingBonusPoints(currentPoints, totalPrice);
+            }
             user.setBonusPoints(round(currentPoints + bonusPoints, 2));
             em.getTransaction().commit();
 
@@ -130,7 +141,8 @@ public class OrderFacade implements OrderRepository {
         BasketDTO basketDTO = getBasketDTOFromUserName(paymentDTO.getUserName());
         PaymentFactoryDTO paymentFactoryDTO = new PaymentFactoryDTO(paymentDTO, basketDTO);
         makePaymentForProducts(paymentFactoryDTO);
-        double bonusPoints = giveBonusPointsToUser(basketDTO, paymentDTO.getUserName());
+
+        double bonusPoints = giveBonusPointsToUser(basketDTO, paymentDTO.getUserName(), paymentDTO.isIsUsingBonusPoints());
 
         EntityManager em = emf.createEntityManager();
 

@@ -85,7 +85,7 @@ class OrderResourceTest extends SetupRestTests {
                 "User", "user@user.com", "1231121", "UserRoad", "20.21.12"
             );
             CreditCardDTO creditCardDTO = new CreditCardDTO("12312313", "3211", "UserCard", "213");
-            requestBody = new PaymentDTO("user", contactInformationDTO, creditCardDTO);
+            requestBody = new PaymentDTO("user", contactInformationDTO, creditCardDTO, false);
         }
 
         @Test
