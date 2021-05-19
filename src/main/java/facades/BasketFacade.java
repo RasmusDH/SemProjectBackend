@@ -102,7 +102,7 @@ public class BasketFacade implements BasketRepository {
              // Total price calc.
             double totalBasketPrice = 0.0;
             for (BasketItem basketItemPrice : b.getItems()) {
-                totalBasketPrice += basketItemPrice.getPrice();
+                totalBasketPrice += (basketItemPrice.getPrice()*basketItemPrice.getAmount());
             }
             b.setTotalPrice(totalBasketPrice);
             // end
